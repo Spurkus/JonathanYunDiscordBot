@@ -19,7 +19,7 @@ client.on('ready', () => {
 client.on('messageCreate', (message) => {
     if (message.content === 'pee'){
         message.reply({
-            content: 'I will suck your dick for free',
+            content: 'I am Jonathan Yun and you can pee on me',
         })
     }
 })
