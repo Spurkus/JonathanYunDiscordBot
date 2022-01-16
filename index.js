@@ -38,7 +38,7 @@ client.on('ready', () => {
 client.on('messageCreate', (message) => {
     if (message.content === 'pee') {
         message.reply({
-            content: 'pong',
+            content: 'I will suck your dick for free',
         });
     }
 });
