@@ -1,6 +1,10 @@
-import Discord, { Intents } from 'discord.js'
+import Discord, { Intents, Interaction } from 'discord.js'
 import dotenv from 'dotenv'
-import fs from 'fs';
+import WOKCommands from 'wokcommands'
+import path from 'path'
+import mongoose from 'mongoose'
+import 'dotenv/config'
+
 dotenv.config();
 
 const prefix = '!J';
@@ -12,16 +16,16 @@ const client = new Discord.Client({
     ]
 })
 
-client.on('ready', () => {
-    console.log("Jonathan Yun is online!")
+client.on('ready', async () => {
+    console.log("Jonathan Yun is online!");
+    
+    new WOKCommands(client, {
+        commandDir: path.join(__dirname, 'commands'),
+        typeScript: true,
+        testServers: ['904159855424733194', '888050919550382090'],
+        mongoUri: process.env.MONGO_URI,
+    })
+    .setDefaultPrefix(prefix)
 })
 
-client.on('messageCreate', (message) => {
-    if (message.content === 'pee'){
-        message.reply({
-            content: 'I am Jonathan Yun and you can pee on me',
-        })
-    }
-})
-
-client.login(process.env.TOKEN)
+client.login(process.env.TOKEN);
