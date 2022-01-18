@@ -18,12 +18,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = __importStar(require("discord.js"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const wokcommands_1 = __importDefault(require("wokcommands"));
+const path_1 = __importDefault(require("path"));
+require("dotenv/config");
 dotenv_1.default.config();
 const prefix = '!J';
 const client = new discord_js_1.default.Client({
@@ -32,14 +44,14 @@ const client = new discord_js_1.default.Client({
         discord_js_1.Intents.FLAGS.GUILD_MESSAGES
     ]
 });
-client.on('ready', () => {
+client.on('ready', () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Jonathan Yun is online!");
-});
-client.on('messageCreate', (message) => {
-    if (message.content === 'pee') {
-        message.reply({
-            content: 'I am Jonathan Yun and you can pee on me',
-        });
-    }
-});
+    new wokcommands_1.default(client, {
+        commandDir: path_1.default.join(__dirname, 'commands'),
+        typeScript: true,
+        testServers: ['904159855424733194', '888050919550382090'],
+        mongoUri: process.env.MONGO_URI,
+    })
+        .setDefaultPrefix(prefix);
+}));
 client.login(process.env.TOKEN);

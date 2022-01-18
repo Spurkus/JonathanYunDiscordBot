@@ -2,7 +2,6 @@ import Discord, { Intents, Interaction } from 'discord.js'
 import dotenv from 'dotenv'
 import WOKCommands from 'wokcommands'
 import path from 'path'
-import mongoose from 'mongoose'
 import 'dotenv/config'
 
 dotenv.config();
