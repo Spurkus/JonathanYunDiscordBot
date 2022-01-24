@@ -1,31 +1,31 @@
-const profileModel = require("../../models/profileSchema");
-
 module.exports = async (client, Discord, message) => {
     const prefix = '!J ';
-    if(!message.content.startsWith(prefix) || message.author.bot) return;
+    const profileModel = require("../../models/profileSchema");
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     let profileData;
-    try{
+    try {
         profileData = await profileModel.findOne({ userID: message.author.id });
-        if(!profileData){
+        if (!profileData) {
             let profile = await profileModel.create({
                 userID: message.author.id,
                 serverID: message.guild.id,
                 coins: 1000,
-                bank: 0
+                bank: 0,
             });
             profile.save();
         }
-    }catch(err){
-        console.log(err)
+    } catch (err) {
+        console.log(err);
     }
+    
     const args = message.content.slice(prefix.length).split(/ +/);
     const cmd = args.shift().toLowerCase();
 
     const command = client.commands.get(cmd) || client.commands.find((a) => a.aliases && a.aliases.includes(cmd));
 
     if(command){
-        command.execute(client, message, args, Discord);
+        command.execute(client, message, args, Discord, profileData);
     } else {
         message.channel.send("this isn't a command lol");
     } 
