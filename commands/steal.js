@@ -43,7 +43,7 @@ module.exports = {
           }
         );
         if(stolen === true) return message.reply(`You stole ¥${amount} YunBucks from ${target.username}, you sneaky little baka >.<`)
-        return message.reply(`You were caught trying to steal from ¥${target.username}. The police are not daijobu at all an fined you 5000 YunBucks`);
+        return message.reply(`You were caught trying to steal from ${target.username}. The police are not daijobu at all an fined you ¥5000 YunBucks`);
       } catch (err) {
         console.log(err);
       }
