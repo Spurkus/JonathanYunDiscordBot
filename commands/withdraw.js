@@ -6,7 +6,7 @@ module.exports = {
   async execute(client, message, args, Discord, profileData){
     const profileModel = require("../models/profileSchema");
     var amount = args[0];
-    if(args[0] === "all") var amount = profileData.coins;
+    if(args[0] === "all") var amount = profileData.bank;
     if (amount % 1 != 0 || amount <= 0) return message.reply("Withdrawn amount must be a whole number");
 
     try {
