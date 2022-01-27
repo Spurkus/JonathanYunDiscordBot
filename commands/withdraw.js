@@ -1,10 +1,10 @@
-const profileModel = require("../models/profileSchema");
 module.exports = {
   name: "withdraw",
-  aliases: ["wd"],
+  aliases: ["wd", "with"],
   permissions: [],
-  description: "withdraw coins from your bank",
+  description: "Withdraw coins from your bank",
   async execute(client, message, args, Discord, profileData){
+    const profileModel = require("../models/profileSchema");
     const amount = args[0];
     if (amount % 1 != 0 || amount <= 0) return message.reply("Withdrawn amount must be a whole number");
 
