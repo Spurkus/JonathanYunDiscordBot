@@ -8,11 +8,12 @@ module.exports = {
       if(!args.length) return message.reply("You need to mention someone to give them YunBucks");
       var amount = args[1];
       const target = message.mentions.users.first();
-      if(!target) return message.channel.send("Bruh who are you trying to give YunBucks to");
+      if(!target) return message.reply("Bruh who are you trying to give YunBucks to");
   
       if(args[0] === "all") var amount = profileData.coins;
-      if(amount % 1 != 0 || amount <= 0) return message.channel.send("Giving amount must be a whole number silly billy");
-  
+      if(amount % 1 != 0 || amount <= 0) return message.reply("Giving amount must be a whole number silly billy");
+      if(amount > profileData.coins) return message.reply("wait a minute you don't have enough YunBucks in your wallet you BAKA")
+
       try {
         const targetData = await profileModel.findOne({ userID: target.id });
         if (!targetData) return message.reply(`This user has to use a Jonathan Yun command first o.o`);
