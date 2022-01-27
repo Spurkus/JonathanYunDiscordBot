@@ -1,5 +1,6 @@
 module.exports = {
     name: 'duck',
+    cooldown: 5,
     description: 'gives you a randomised cute duck photo yayayaya',
     async execute(client, message, args, Discord) {
         const fs = require('fs');

@@ -1,5 +1,6 @@
 module.exports = {
     name: 'peet',
+    cooldown: 5,
     description: '50/50 chance of getting pets or feet pics',
     async execute(client, message, args, Discord) {
         const fs = require('fs');
