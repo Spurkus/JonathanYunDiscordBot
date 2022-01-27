@@ -7,7 +7,7 @@ module.exports = {
     const profileModel = require("../models/profileSchema");
     var amount = args[0];
     if(args[0] === "all") var amount = profileData.bank;
-    if (amount % 1 != 0 || amount <= 0) return message.reply("Withdrawn amount must be a whole number");
+    if (amount % 1 != 0 || amount <= 0) return message.reply("Withdrawn amount must be a whole number you baka >.<");
 
     try {
       if (amount > profileData.bank) return message.reply(`You don't have that amount of YunBucks to withdraw`);
