@@ -6,7 +6,6 @@ module.exports = {
     async execute(client, message, args, Discord, profileData){
         const randomChance = Math.floor(Math.random() * 100);
         console.log(randomChance)
-        var randomNumber;
         if(randomChance <= 15){
             var randomNumber = 0;
             message.reply(`${message.author.username}, you begged and nobody likes you so recieved nothing LMAOO. ¥${randomNumber} **YunBucks** was added`);
@@ -18,7 +17,16 @@ module.exports = {
             var randomNumber = Math.floor(Math.random() * 500) + 1;
             message.reply(`${message.author.username}, you begged and recieved ¥${randomNumber} **YunBucks**.`);
         }
-        console.log(randomNumber)
+        const response = await profileModel.findOneAndUpdate(
+            {
+                userID: message.author.id,
+            },
+            {
+                $inc: {
+                    coins: randomNumber,
+                },
+            }
+        );
   },
 };
 
