@@ -5,7 +5,8 @@ module.exports = {
   description: "Withdraw coins from your bank",
   async execute(client, message, args, Discord, profileData){
     const profileModel = require("../models/profileSchema");
-    const amount = args[0];
+    var amount = args[0];
+    if(args[0] === "all") var amount = profileData.coins;
     if (amount % 1 != 0 || amount <= 0) return message.reply("Withdrawn amount must be a whole number");
 
     try {
@@ -23,7 +24,7 @@ module.exports = {
         }
       );
 
-      return message.reply(`You withdrew ¥${amount} of YunBucks into your wallet`);
+      return message.reply(`You withdrew ¥${amount} YunBucks into your wallet`);
     } catch (err) {
       console.log(err);
     }
