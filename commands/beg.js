@@ -2,7 +2,7 @@ const profileModel = require("../models/profileSchema");
 module.exports = {
     name: "beg",
     aliases: [],
-    cooldown: 20,
+    cooldown: 10,
     description: "beg for coins",
     async execute(client, message, args, Discord, profileData){
         if(profileData.coins < 200) return message.reply("You need at least ¥200 YunBucks in your wallet to beg");
