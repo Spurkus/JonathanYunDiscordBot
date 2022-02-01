@@ -5,12 +5,11 @@ module.exports = {
     cooldown: 10,
     description: "beg for coins",
     async execute(client, message, args, Discord, profileData){
-        if(profileData.coins < 200) return message.reply("You need at least ¥200 YunBucks in your wallet to beg");
         const randomChance = Math.floor(Math.random() * 100);
         if(randomChance <= 15){
             var randomNumber = 0;
             message.reply(`${message.author.username}, you begged and nobody likes you so recieved nothing LMAOO. ¥${randomNumber} **YunBucks** was added`);
-        } else if(randomChance <= 25){
+        } else if(randomChance <= 25 && profileData.coins > 200){
             var randomNumber = -Math.floor(Math.random() * 200) + 1;
             var pos = randomNumber * -1;
             message.reply(`${message.author.username}, you begged and someone hates you so they decided to rob you L. ¥${pos} **YunBucks** was taken from your wallet`);
