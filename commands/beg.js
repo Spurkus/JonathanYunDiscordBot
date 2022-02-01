@@ -1,10 +1,10 @@
-const profileModel = require("../models/profileSchema");
 module.exports = {
     name: "beg",
     aliases: [],
     cooldown: 10,
     description: "beg for coins",
     async execute(client, message, args, Discord, profileData){
+        const profileModel = require("../models/profileSchema");
         const randomChance = Math.floor(Math.random() * 100);
         if(randomChance <= 15){
             var randomNumber = 0;
