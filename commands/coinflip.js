@@ -7,7 +7,7 @@ module.exports = {
       const profileModel = require("../models/profileSchema");
       var amount = args[0];
       if(args[0] === "all") var amount = profileData.coins;
-      if (amount % 1 != 0 || amount <= 0) return message.reply("Withdrawn amount must be a whole number you baka >.<");
+      if (amount % 1 != 0 || amount <= 0) return message.reply("Gambling amount must be a whole number you baka >.<");
       try {
         if (amount > profileData.coins) return message.reply(`You don't have that amount of YunBucks to gamble`);
 
@@ -25,8 +25,7 @@ module.exports = {
           },
           {
             $inc: {
-              coins: amount,
-              bank: -amount,
+              coins: -amount,
             },
           }
         );
