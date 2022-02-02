@@ -30,14 +30,10 @@ module.exports = {
             },
           }
         );
+        if(gamble == true) return message.reply(`AYYY YOU WON!!! ¥${amount} YunBucks was added into your wallet`);
+          return message.reply(`LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${amount} YunBucks was taken from your wallet`);
       } catch (err) {
         console.log(err);
-
-        if(gamble == true){
-            return message.reply(`AYYY YOU WON!!! ¥${amount} YunBucks was added into your wallet`);
-        } else {
-            return message.reply(`LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${amount} YunBucks was taken from your wallet`);
-        }
       } 
     }
   };
