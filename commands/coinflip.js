@@ -14,7 +14,6 @@ module.exports = {
         const randomChance = Math.random();
         if(randomChance < 0.5){
             var gamble = true;
-            amount *= 2;
         } else {
             var gamble = false;
             amount = -amount;
