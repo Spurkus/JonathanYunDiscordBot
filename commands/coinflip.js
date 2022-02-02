@@ -18,6 +18,7 @@ module.exports = {
         } else {
             var gamble = false;
             amount = -amount;
+            var pos = amount * -1;
         }
         await profileModel.findOneAndUpdate(
           {
@@ -25,12 +26,12 @@ module.exports = {
           },
           {
             $inc: {
-              coins: -amount,
+              coins: amount,
             },
           }
         );
         if(gamble == true) return message.reply(`AYYY YOU WON!!! ¥${amount} YunBucks was added into your wallet`);
-          return message.reply(`LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${amount} YunBucks was taken from your wallet`);
+          return message.reply(`LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${pos} YunBucks was taken from your wallet`);
       } catch (err) {
         console.log(err);
       } 
