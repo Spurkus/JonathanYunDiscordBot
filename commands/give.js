@@ -10,7 +10,7 @@ module.exports = {
       const target = message.mentions.users.first();
       if(!target) return message.reply("Bruh who are you trying to give YunBucks to");
   
-      if(args[0] === "all") var amount = profileData.coins;
+      if(args[1] === "all") var amount = profileData.coins;
       if(amount % 1 != 0 || amount <= 0) return message.reply("Giving amount must be a whole number silly billy");
       if(amount > profileData.coins) return message.reply("wait a minute you don't have enough YunBucks in your wallet you BAKA")
 
