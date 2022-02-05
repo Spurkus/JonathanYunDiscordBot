@@ -12,7 +12,7 @@ module.exports = {
         if (amount > profileData.coins) return message.reply(`You don't have that amount of YunBucks to gamble`);
 
         if(message.author.name === "Ellaful"){
-          var gambleChance = 0.2;
+          var gambleChance = 0.85;
         } else {
           var gambleChance = 0.5;
         }
