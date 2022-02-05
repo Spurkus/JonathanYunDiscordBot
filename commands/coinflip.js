@@ -11,8 +11,13 @@ module.exports = {
       try {
         if (amount > profileData.coins) return message.reply(`You don't have that amount of YunBucks to gamble`);
 
+        if(message.author.name === "Ellaful"){
+          var gambleChance = 0.2;
+        } else {
+          var gambleChance = 0.5;
+        }
         const randomChance = Math.random();
-        if(randomChance < 0.5){
+        if(randomChance < gambleChance){
             var gamble = true;
         } else {
             var gamble = false;
