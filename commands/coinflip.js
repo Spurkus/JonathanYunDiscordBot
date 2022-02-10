@@ -13,8 +13,6 @@ module.exports = {
 
         if(message.author.username === "Ellaful"){
           var gambleChance = 0.65;
-        } else if(message.author.username === "Spurk"){
-          var gambleChance = 0.75;
         } else {
           var gambleChance = 0.5;
         }
