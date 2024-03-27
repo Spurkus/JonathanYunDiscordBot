@@ -1,6 +1,5 @@
 <h1 style="text-align:center;">🔥Jonathan Yun Discord Bot🔥</h1>
-So chat, this is a discord.js bot that is Jonathan Yun basically!
-To run this on your own machine,
+So chat, this is a discord.js bot that is Jonathan Yun basically! The Jonathan Yun Discord Bot is awesome!!! Trust me 😎.
 
 ## 💩 Installation, Build and Run
 
