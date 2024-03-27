@@ -2,8 +2,6 @@
 So chat, this is a discord.js bot that is Jonathan Yun basically!
 To run this on your own machine,
 
-![Jonathan Yun](https://i.imgur.com/E7fHQGR.png)
-
 ## 💩 Installation, Build and Run
 
 1) Clone the repository then create a file named `.env` and ask me for information or something like that .env yk you get it.
@@ -33,4 +31,7 @@ npm start
 ## 😘 To Do
 - Economy Update
 - Web Scraping Image
+
+---
+![Jonathan Yun](https://i.imgur.com/E7fHQGR.png)
 - AI genrated responses :3
