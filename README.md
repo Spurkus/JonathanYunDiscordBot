@@ -31,7 +31,8 @@ npm start
 ## 😘 To Do
 - Economy Update
 - Web Scraping Image
+- AI genrated responses :3
 
 ---
 ![Jonathan Yun](https://i.imgur.com/E7fHQGR.png)
-- AI genrated responses :3
+
