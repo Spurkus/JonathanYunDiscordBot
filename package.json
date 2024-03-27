@@ -1,24 +1,27 @@
 {
-  "name": "jonathan-yun",
-  "version": "2.0.0",
-  "description": "Jonathan Yun",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^13.6.0",
-    "dotenv": "^12.0.4",
-    "fs": "^0.0.1-security",
-    "mongoose": "^6.1.6",
-    "path": "^0.12.7",
-    "wokcommands": "^1.5.3"
-  },
-  "devDependencies": {
-    "typescript": "^4.5.4"
-  }
+    "name": "Jonathan Yun",
+    "version": "3.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "cls && node build/index.js",
+        "build": "cls && node build.js"
+    },
+    "keywords": [],
+    "author": "Spurkus",
+    "license": "ISC",
+    "dependencies": {
+        "@discordjs/rest": "^1.1.0",
+        "@types/node": "^18.7.14",
+        "chalk": "^4.1.2",
+        "discord.js": "14.3.0",
+        "dotenv": "^16.0.2",
+        "mongoose": "^6.5.4"
+    },
+    "devDependencies": {
+        "typescript": "^4.8.2"
+    },
+    "overrides": {
+        "discord-api-types": "0.37.20"
+    }
 }
