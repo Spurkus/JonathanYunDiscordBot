@@ -1,8 +1,11 @@
-<h1 style="text-align:center;">Jonathan Yun Discord Bot</h1>
+<h1 style="text-align:center;">🔥Jonathan Yun Discord Bot🔥</h1>
 So chat, this is a discord.js bot that is Jonathan Yun basically!
 To run this on your own machine,
-## Installation, Build and Run
+
+## 💩 Installation, Build and Run
+
 1) Clone the repository then create a file named `.env` and ask me for information or something like that .env yk you get it.
+
 2) Install typescript (You can skip this if you already have typescript installed)
   ```ts
   npm install -g typescript
@@ -19,13 +22,13 @@ npm run build
 npm start
 ```
 
-## Features
+## 💪 Features
 - Slash Commands
 - Basic Interactions
 - Image Retrieval
 - Funny
 
-## To Do
+## 😘 To Do
 - Economy Update
 - Web Scraping Image
 - AI genrated responses :3
