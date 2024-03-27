@@ -1,7 +1,7 @@
 <h1 style="text-align:center;">🔥Jonathan Yun Discord Bot🔥</h1>
 So chat, this is a discord.js bot that is Jonathan Yun basically!
 To run this on your own machine,
-![Jonathan Yun](https://i.imgur.com/E7fHQGR.png)
+![Jonathan_Yun](https://i.imgur.com/E7fHQGR.png)
 
 ## 💩 Installation, Build and Run
 
