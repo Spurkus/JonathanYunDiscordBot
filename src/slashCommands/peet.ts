@@ -2,7 +2,7 @@ import { SlashCommandBuilder, ChannelType, TextChannel, EmbedBuilder, Attachment
 import { imageFinder } from "../functions";
 import { SlashCommand } from "../types";
 
-const command : SlashCommand = {
+const command: SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("peet")
     .setDescription("50/50 chance of getting pets or feet pics")

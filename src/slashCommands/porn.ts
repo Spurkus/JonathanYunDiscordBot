@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChannelType, TextChannel, EmbedBuilder } from "discord.js"
 import { SlashCommand } from "../types";
 
-const command : SlashCommand = {
+const command: SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("porn")
     .setDescription("O///O")

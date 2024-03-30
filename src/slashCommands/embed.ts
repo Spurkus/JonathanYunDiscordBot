@@ -2,7 +2,7 @@ import { SlashCommandBuilder, TextChannel, EmbedBuilder, ColorResolvable } from 
 import { SlashCommand } from "../types";
 
 const command: SlashCommand = {
-  command: new SlashCommandBuilder()
+    command: new SlashCommandBuilder()
     .setName("embed")
     .addStringOption(option => {
       return option

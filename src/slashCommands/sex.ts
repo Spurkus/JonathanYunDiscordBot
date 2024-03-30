@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js"
 import { SlashCommand } from "../types";
 
-const command : SlashCommand = {
+const command: SlashCommand = {
     command: new SlashCommandBuilder()
         .setName("sex")
         .setDescription("What is your favourite sex?")

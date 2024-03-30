@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChannelType, TextChannel, EmbedBuilder } from "discord.js"
 import { SlashCommand } from "../types";
 
-const command : SlashCommand = {
+const command: SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("hi")
     .setDescription("Says hi if you say hi :3")
