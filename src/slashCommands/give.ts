@@ -37,7 +37,7 @@ const command: SlashCommand = {
         }
 
         // Target has not tried any economy
-        if (!target) return interaction.reply(`${targetExists} hasn't even opened up a bank account in 'Yun Banks™' yet and you're trying to give YunBucks to them :sob:`);
+        if (!target) return interaction.reply(`${targetExists} hasn't even opened up a bank account in 'Yun Banks™' yet and you're trying to give **YunBucks** to them :sob:`);
 
         if (amount <= 0) return interaction.reply("Silly!!! You have to input positive whole numbers!!")
 
