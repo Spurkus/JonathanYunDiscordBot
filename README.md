@@ -1,25 +1,11 @@
-<h1 style="text-align:center;">Discord.js v14 Bot Template</h1>
+<h1 style="text-align:center;">🔥Jonathan Yun Discord Bot🔥</h1>
+So chat, this is a discord.js bot that is Jonathan Yun basically! The Jonathan Yun Discord Bot is awesome!!! Trust me 😎.
 
-## Features
+## 💩 Installation, Build and Run
 
-* 🟦 Typescript
-* 🔥 Slash commands (supports auto complete!)
-* ✉️ Message commands
-* 🕛 Cooldowns
-* 🏴 Detailed Permissions
-* 💪 Event & Command handlers
-* 🍃 MongoDB Support
+1) Clone the repository then create a file named `.env` and ask me for information or something like that .env yk you get it.
 
-## Installation, Build and Run
-1) Clone the repository then create a file named `.env` and fill it out accordingly
-```js
-TOKEN=YOURTOKENHERE
-CLIENT_ID=BOTS CLIENT ID
-PREFIX=!
-MONGO_URI=YOUR MONGO CONNECTION STRING
-MONGO_DATABASE_NAME=YOUR DATABASE NAME
-```
-2) Install typescript, To install TypeScript, you can run the following command in your terminal, This will install the latest version of TypeScript globally on your computer. (You can skip this if you already have typescript installed)
+2) Install typescript (You can skip this if you already have typescript installed)
   ```ts
   npm install -g typescript
   ```
@@ -34,3 +20,18 @@ npm run build
 ```js
 npm start
 ```
+
+## 💪 Features
+- Slash Commands
+- Basic Interactions
+- Image Retrieval
+- Funny
+
+## 😘 To Do
+- Economy Update
+- Web Scraping Image
+- AI genrated responses :3
+
+---
+![Jonathan Yun](https://i.imgur.com/E7fHQGR.png)
+
