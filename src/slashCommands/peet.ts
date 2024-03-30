@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChannelType, TextChannel, EmbedBuilder, AttachmentBuilder } from "discord.js"
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
 import { imageFinder } from "../functions";
 import { SlashCommand } from "../types";
 

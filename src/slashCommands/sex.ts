@@ -22,6 +22,7 @@ const command: SlashCommand = {
 
 		await interaction.showModal(modal);
     },
+
     modal: async (interaction) => {
         await interaction.deferReply({ ephemeral: true });
         

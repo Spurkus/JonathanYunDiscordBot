@@ -1,36 +1,40 @@
-import { SlashCommandBuilder, } from "discord.js"
+import { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js"
 import { SlashCommand } from "../types";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("say")
-    .addStringOption(option => {
-      return option
-        .setName("message")
-        .setDescription("Message that Jonathan Yun will say")
-        .setRequired(true);
-    })
     .setDescription("What Jonathan Yun should say fr!!")
     ,
     execute: async interaction => {
-        try {
-            await interaction.deferReply({ ephemeral: true });
-            const message = interaction.options.getString("message");
+        const modal = new ModalBuilder()
+            .setCustomId("messageModal")
+            .setTitle("Jonathan Yun Message:")
 
-            if (!message) {
-                return interaction.editReply({ content: "Please provide a message." });
-            }
+		const hobbiesInput = new TextInputBuilder()
+			.setCustomId("message")
+			.setLabel("What do you want Jonathan Yun to say?")
+			.setStyle(TextInputStyle.Paragraph);
 
-            const formattedMessage = message.replace(/\\n/g, '\n');
+		const secondActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(hobbiesInput);
 
-            // Send the message to the same channel
-            await interaction.channel?.send(formattedMessage);
+		modal.addComponents(secondActionRow);
 
-            return interaction.editReply({ content: "Message sent successfully!" });
-        } catch (error) {
-            console.error("Error:", error);
-            return interaction.editReply({ content: "Something went wrong..." });
+		await interaction.showModal(modal);
+    },
+
+    modal: async interaction => {
+        await interaction.deferReply({ ephemeral: true });
+        const message = interaction.fields.getTextInputValue('message');
+
+        if (!message) {
+            return interaction.editReply({ content: "Please provide a message." });
         }
+
+        // Send the message to the same channel
+        await interaction.channel?.send(message);
+
+        return interaction.editReply({ content: "Message sent successfully!" });
     },
     cooldown: 5
 }
