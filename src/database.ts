@@ -84,3 +84,26 @@ export const setDate = async (userId: string): Promise<ISex | null> => {
     const date = new Date()
     return SexModel.findOneAndUpdate({ userId }, { $set: { date: date } }, { new: true }).exec();
 }
+
+export const getAllSex = async (): Promise<ISex[]> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return SexModel.find().exec()
+}
+
+export const getTopSex = async (membersPromise: Promise<Collection<string, GuildMember>>, limit: number): Promise<ISex[]> => {
+    const members = await membersPromise;
+    const allSexUsers = await getAllSex(); // Function to get all sex users from your database
+    const serverUserIds: Set<string> = new Set(members.map(member => member.id));
+    const serverSexUsers = allSexUsers.filter(user => serverUserIds.has(user.userId));
+    const sortedUsers = serverSexUsers.sort((a, b) => b.total - a.total); // Sorting based on sex
+    return sortedUsers.slice(0, limit);
+}
+
+export const getTopSexStreak = async (membersPromise: Promise<Collection<string, GuildMember>>, limit: number): Promise<ISex[]> => {
+    const members = await membersPromise;
+    const allSexUsers = await getAllSex(); // Function to get all sex users from your database
+    const serverUserIds: Set<string> = new Set(members.map(member => member.id));
+    const serverSexUsers = allSexUsers.filter(user => serverUserIds.has(user.userId));
+    const sortedUsers = serverSexUsers.sort((a, b) => b.streak - a.streak); // Sorting based on sex streak
+    return sortedUsers.slice(0, limit);
+}
