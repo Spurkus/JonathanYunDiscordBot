@@ -66,3 +66,7 @@ export const setGuildOption = async (guild: Guild, option: GuildOption, value: a
 export const capitalisedName = (name: string): string => {
     return name.charAt(0).toUpperCase() + name.slice(1);
 }
+
+export const getDateString = (date: Date): string => {
+    return date.toISOString().split('T')[0];
+}

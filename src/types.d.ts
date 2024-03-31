@@ -23,7 +23,13 @@ export interface IUser extends mongoose.Document {
     userId: string;
     bank: number;
     wallet: number;
-    sex: boolean;
+}
+
+export interface ISex extends mongoose.Document {
+    userId: string;
+    date: Date;
+    total: number;
+    streak: number;
 }
 
 export type GuildOption = keyof GuildOptions

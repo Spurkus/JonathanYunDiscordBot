@@ -1,7 +1,8 @@
 import { Collection, GuildMember } from "discord.js";
 import { connection } from "mongoose";
-import { IUser } from "./types";
+import { IUser, ISex } from "./types";
 import UserModel from "./schemas/User";
+import SexModel from "./schemas/Sex";
 
 export const getUser = async (userId: string): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
@@ -50,4 +51,36 @@ export const getAllUsers = async (): Promise<IUser[]> => {
 
 export const calculateNetWorth = (user: IUser): number => {
     return user.wallet + user.bank;
+}
+
+export const getSex = async (userId: string): Promise<ISex | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return SexModel.findOne({ userId }).exec();
+}
+
+export const createSex = async (userId: string): Promise<ISex> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    const sex = new SexModel({ userId });
+    return sex.save();
+}
+
+export const addTotal = async (userId: string): Promise<ISex | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return SexModel.findOneAndUpdate({ userId }, { $inc: { total: 1 } }, { new: true }).exec();
+}
+
+export const addStreak = async (userId: string): Promise<ISex | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return SexModel.findOneAndUpdate({ userId }, { $inc: { streak: 1 } }, { new: true }).exec();
+}
+
+export const resetStreak = async (userId: string): Promise<ISex | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return SexModel.findOneAndUpdate({ userId }, { $set: { streak: 0 } }, { new: true }).exec();
+}
+
+export const setDate = async (userId: string): Promise<ISex | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    const date = new Date()
+    return SexModel.findOneAndUpdate({ userId }, { $set: { date: date } }, { new: true }).exec();
 }

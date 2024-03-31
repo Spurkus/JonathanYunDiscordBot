@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
 import { SlashCommand } from "../types";
-import { getUser, createUser } from "../economy";
+import { getUser, createUser } from "../database";
 import { capitalisedName } from "../functions";
 
 const formatName = (name: string): string => {

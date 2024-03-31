@@ -5,15 +5,14 @@ import { SlashCommand } from "../types";
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("about")
-    .setDescription("About me")
+    .setDescription("Jonathan Yun's about me :33")
     ,
     execute: async interaction => {
-        const {image, attach} = imageFinder("jonathan");
-
         const embed = new EmbedBuilder()
         .setDescription("Hi! I'm Jonathan Yun, and I'm awesome!!")
         .setTitle("About Me")
-        .setAuthor({ name: 'Jonathan Yun', iconURL: "https://i.imgur.com/E7fHQGR.png" , url: 'https://jonathanyun.com' })
+        .setAuthor({ name: "Jonathan Yun", iconURL: "https://i.imgur.com/E7fHQGR.png" , url: 'https://jonathanyun.com' })
+        .setThumbnail("https://i.imgur.com/E7fHQGR.png")
         .setColor(`Aqua`)
         .addFields(
             { name: 'Linkedin', value: '[Click here!](https://www.linkedin.com/in/thejonathanyun/)', inline : true },

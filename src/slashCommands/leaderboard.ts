@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
 import { SlashCommand } from "../types";
-import { calculateNetWorth, getTopUsers } from "../economy";
+import { calculateNetWorth, getTopUsers } from "../database";
 import { capitalisedName } from "../functions";
 
 const getName = async (guild: any, userID: string): Promise<string> => {

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js"
 import { SlashCommand } from "../types";
-import { getUser, createUser, removeFromBank, addToWallet } from "../economy";
+import { getUser, createUser, removeFromBank, addToWallet } from "../database";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()

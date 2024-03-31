@@ -1,34 +1,51 @@
-import { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js"
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
 import { SlashCommand } from "../types";
+import { getSex, createSex } from "../database";
+import { capitalisedName } from "../functions";
+
+const formatName = (name: string): string => {
+    if (name[name.length - 1] == "s") {
+        return capitalisedName(name) + "' Epic Sex";
+    }
+    return capitalisedName(name) + "'s Epic Sex";
+}
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
-        .setName("sex")
-        .setDescription("What is your favourite sex?")
+    .setName("sex")
+    .addUserOption(option => {
+      return option
+        .setName("target")
+        .setDescription("The person's sex")
+        .setRequired(false)
+    })
+    .setDescription("Check user's sex")
     ,
-    execute: async (interaction) => {
-        const modal = new ModalBuilder()
-            .setCustomId("sex")
-            .setTitle("What is your favourite?")
+    execute: async interaction => {
+        let userID = interaction.user.id;
+        let targetUser = interaction.options.getUser("target");
 
-		const hobbiesInput = new TextInputBuilder()
-			.setCustomId('sexInput')
-			.setLabel("What's some of your favourite sex?")
-			.setStyle(TextInputStyle.Paragraph);
+        if (targetUser) {
+            userID = targetUser.id;
+        }
+        const user = await getSex(userID);
+        const streak = user ? user.streak : 0;
+        const total = user ? user.total : 0;
 
-		const secondActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(hobbiesInput);
+        if (!user) {
+            if (targetUser) return interaction.reply("This person hasn't even sex yet!!");
+            createSex(userID);
+        }
 
-		modal.addComponents(secondActionRow);
+        const embed = new EmbedBuilder()
+        .setTitle(`**${formatName(targetUser ? targetUser.username : interaction.user.username)}**`)
+        .setDescription(`**Streak:** ${streak}\n**Total:** ${total}`)
+        .setColor("Red")
+        .setThumbnail(targetUser? targetUser.displayAvatarURL() : interaction.user.displayAvatarURL())
 
-		await interaction.showModal(modal);
-    },
-
-    modal: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true });
-        
-        const hobbies = interaction.fields.getTextInputValue('sexInput');
-
-        await interaction.editReply({ content: `So, your sex is ${hobbies}! <:Jonathan:1217063765518848011>` });
+        await interaction.reply({
+            embeds: [embed],
+        })
     },
     cooldown: 5
 }
