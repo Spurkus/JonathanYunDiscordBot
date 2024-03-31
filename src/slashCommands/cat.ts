@@ -1,6 +1,14 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
 import { imageFinder } from "../functions";
 import { SlashCommand } from "../types";
+import { TheCatAPI } from "@thatapicompany/thecatapi";
+
+const catApiKey = process.env.CATAPI_KEY;
+if (!catApiKey) {
+    throw new Error("CATAPI_KEY is not defined in environment variables.");
+}
+
+const theCatAPI = new TheCatAPI(catApiKey);
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
@@ -8,17 +16,26 @@ const command: SlashCommand = {
     .setDescription("You get a randomised cute cat photo yayay!! but sometimes you get james corden cat o.o")
     ,
     execute: async interaction => {
-        const {image, attach} = imageFinder("cat");
 
-        const embed = new EmbedBuilder()
-        .setDescription("awwwww cute cat")
-        .setTitle("Cute cats")
-        .setImage(`attachment://${image}`)
-        .setColor(`Aqua`)
+        theCatAPI.images
+            .searchImages({
+              limit: 1,
+            })
+            .then((images) => {
+                const embed = new EmbedBuilder()
+                .setDescription("awwwww cute car")
+                .setTitle("Cute cats")
+                .setImage(`${images[0].url}`)
+                .setColor(`Aqua`)
+        
+                interaction.reply({
+                    embeds: [embed],
+            })
+            .catch((error) => {
+              console.log("error cat")
+            });
 
-        await interaction.reply({
-            embeds: [embed],
-            files: [attach]
+        
         })
     },
     cooldown: 5
