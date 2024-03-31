@@ -25,10 +25,11 @@ npm start
 - Slash Commands
 - Basic Interactions
 - Image Retrieval
+- Basic Economy
 - Funny
 
 ## 😘 To Do
-- Economy Update
+- Economy Update (Shops, Items, Work/Jobs)
 - Web Scraping Image
 - AI genrated responses :3
 
