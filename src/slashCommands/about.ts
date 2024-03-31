@@ -13,16 +13,16 @@ const command: SlashCommand = {
         const embed = new EmbedBuilder()
         .setDescription("Hi! I'm Jonathan Yun, and I'm awesome!!")
         .setTitle("About Me")
-        .setAuthor({ name: 'Jonathan Yun', iconURL: `attachment://${image}` , url: 'https://jonathanyun.com' })
+        .setAuthor({ name: 'Jonathan Yun', iconURL: "https://i.imgur.com/E7fHQGR.png" , url: 'https://jonathanyun.com' })
         .setColor(`Aqua`)
         .addFields(
             { name: 'Linkedin', value: '[Click here!](https://www.linkedin.com/in/thejonathanyun/)', inline : true },
             { name: 'Instagram', value: '[Click here!](https://www.instagram.com/mfw_jonathan/)', inline : true },
+            { name: 'Github', value: '[Click here!](https://github.com/Spurkus/JonathanYunDiscordBot/)', inline : true }
         )
 
         await interaction.reply({
             embeds: [embed],
-            files: [attach]
         })
     },
     cooldown: 5
