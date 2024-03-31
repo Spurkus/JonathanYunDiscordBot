@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "start": "cls && node build/index.js",
-        "build": "cls && node build.js"
+        "build": "cls && node build.js",
+        "script": "cls && node build/scripts/script.js"
     },
     "keywords": [],
     "author": "Spurkus",

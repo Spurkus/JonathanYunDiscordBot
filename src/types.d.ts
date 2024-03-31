@@ -19,6 +19,13 @@ export interface IGuild extends mongoose.Document {
     joinedAt: Date
 }
 
+export interface IUser extends mongoose.Document {
+    userId: string;
+    bank: number;
+    wallet: number;
+    sex: boolean;
+}
+
 export type GuildOption = keyof GuildOptions
 export interface BotEvent {
     name: string,

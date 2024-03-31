@@ -5,6 +5,7 @@ import { SlashCommand } from "./types";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { join } from "path";
+import { addFieldToUsers } from "./scripts/script";
 config()
 
 client.slashCommands = new Collection<string, SlashCommand>()
@@ -15,5 +16,7 @@ readdirSync(handlersDir).forEach(handler => {
     if (!handler.endsWith(".js")) return;
     require(`${handlersDir}/${handler}`)(client)
 })
+
+// addFieldToUsers();
 
 client.login(process.env.TOKEN)
