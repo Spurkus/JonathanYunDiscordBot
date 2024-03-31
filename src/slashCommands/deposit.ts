@@ -46,7 +46,7 @@ const command: SlashCommand = {
         addToBank(userID, amountNumber);
         return interaction.reply(`You deposited ¥${amountNumber} **YunBucks** into your bank`);
     },
-    cooldown: 10
+    cooldown: 600
 }
 
 export default command

@@ -20,12 +20,12 @@ const command: SlashCommand = {
         const randomChance = Math.floor(Math.random() * 100); // Random :3
 
         // Receives Nothing
-        if (randomChance <= 15) {
+        if (randomChance <= 8) {
             return interaction.reply(`${interaction.member}, you begged and nobody likes you so received nothing LMAOO. ¥0 **YunBucks** was added`);
         } 
         
         // Gets Robbed
-        if (randomChance <= 25 && user.wallet > 200) {
+        if (randomChance <= 15 && user.wallet > 200) {
             var randomNumber = Math.floor(Math.random() * 200) + 1;
             removeFromWallet(userID, randomNumber);
             return interaction.reply(`${interaction.member}, you begged and someone hates you so they decided to rob you L. ¥${randomNumber} **YunBucks** was taken from your wallet`);

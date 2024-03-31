@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js"
+import { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, SelectMenuOptionBuilder } from "discord.js"
 import { SlashCommand } from "../types";
 
 const command: SlashCommand = {
@@ -8,15 +8,15 @@ const command: SlashCommand = {
     ,
     execute: async interaction => {
         const modal = new ModalBuilder()
-            .setCustomId("messageModal")
+            .setCustomId("say")
             .setTitle("Jonathan Yun Message:")
 
-		const hobbiesInput = new TextInputBuilder()
+		const messageInput = new TextInputBuilder()
 			.setCustomId("message")
 			.setLabel("What do you want Jonathan Yun to say?")
 			.setStyle(TextInputStyle.Paragraph);
 
-		const secondActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(hobbiesInput);
+		const secondActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(messageInput);
 
 		modal.addComponents(secondActionRow);
 
@@ -25,11 +25,7 @@ const command: SlashCommand = {
 
     modal: async interaction => {
         await interaction.deferReply({ ephemeral: true });
-        const message = interaction.fields.getTextInputValue('message');
-
-        if (!message) {
-            return interaction.editReply({ content: "Please provide a message." });
-        }
+        const message = interaction.fields.getTextInputValue("message");
 
         // Send the message to the same channel
         await interaction.channel?.send(message);

@@ -31,7 +31,7 @@ const command: SlashCommand = {
         // Target has not tried any economy
         if (!target) return interaction.reply(`${targetExists} hasn't even opened up a bank account in 'Yun Banks™' yet and you're trying to rob them :sob:, so impatient smh smh`);
 
-        if (user.wallet < 5000) return interaction.reply(`You need at least ¥5000 **YunBucks** to steal from ${targetExists}`);
+        if (user.wallet < 5000) return interaction.reply(`You need at least ¥5000 **YunBucks** in your wallet to steal from ${targetExists}`);
 
         if (target.wallet < 500) return interaction.reply(`${targetExists} BARELY has any **YunBucks**. Why are you trying to steal from them, just let them be lmao`);
 

@@ -45,7 +45,7 @@ const command: SlashCommand = {
         addToWallet(userID, amountNumber);
         return interaction.reply(`You withdrew ¥${amountNumber} **YunBucks** into your wallet`);
     },
-    cooldown: 600
+    cooldown: 10
 }
 
 export default command
