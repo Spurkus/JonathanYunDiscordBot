@@ -26,6 +26,7 @@ npm start
 - Basic Interactions
 - Image Retrieval
 - Basic Economy
+- Sex
 - Funny
 
 ## 😘 To Do
