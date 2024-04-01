@@ -1,7 +1,13 @@
-import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
-import { IUser, ISex, SlashCommand } from "../types";
+import { SlashCommandBuilder, EmbedBuilder, Embed, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, MessageComponentInteraction } from "discord.js"
+import { SlashCommand } from "../types";
 import { calculateNetWorth, getTopUsers, getTopSex, getTopSexStreak } from "../database";
 import { capitalisedName } from "../functions";
+
+type Position = Promise<{ name: string; value: string; }>[]
+interface DisplayResult {
+    embed: EmbedBuilder;
+    row: ActionRowBuilder<ButtonBuilder>;
+}
 
 const getName = async (guild: any, userID: string): Promise<string> => {
     const member = await guild.members.fetch(userID);
@@ -23,6 +29,46 @@ const getTrophyEmoji = (index: number): string => {
 
 const createName = (namePlacement: string): string => {
     return getTrophyEmoji(parseInt(namePlacement.charAt(0))) + namePlacement
+}
+
+const displayInteraction = async (promises: Position, highestStreaks: Position, total: boolean): Promise<DisplayResult> => {
+    const totalSex = new ButtonBuilder()
+        .setCustomId("totalSex")
+        .setLabel("Total Sex")
+        .setEmoji("💪")
+        .setDisabled(total)
+        .setStyle(ButtonStyle.Success);
+
+    const streakSex = new ButtonBuilder()
+        .setCustomId("streakSex")
+        .setLabel("Streak Sex")
+        .setEmoji("🔥")
+        .setDisabled(!total)
+        .setStyle(ButtonStyle.Danger);
+
+    const row = new ActionRowBuilder<ButtonBuilder>()
+        .addComponents(totalSex, streakSex);
+
+    if (total) {
+        const embedTotal = new EmbedBuilder()
+            .setTitle("Sex Leaderboard :smiling_imp:")
+            .setColor("Red")
+            .addFields(
+            { name: "❤️❤️❤️❤️❤️❤️", value: "**Total Sex**" },
+            ...(await Promise.all(promises)),
+        );
+
+        return {embed: embedTotal, row};
+    } else {
+        const embedStreak = new EmbedBuilder()
+            .setTitle("Sex Leaderboard :smiling_imp:")
+            .setColor("Red")
+            .addFields(
+            { name: "❤️❤️❤️❤️❤️❤️", value: "**Highest Sex Streak!!**" },
+            ...(await Promise.all(highestStreaks))
+        );
+        return {embed: embedStreak, row};
+    }
 }
 
 const command: SlashCommand = {
@@ -48,42 +94,57 @@ const command: SlashCommand = {
         if (!type) return interaction.reply("You must select a leaderboard type :3")
         const yun = type == "yunbucks";
 
-        let topUsers: (IUser | ISex)[];
-        let topStreak;
-        let promises;
+        if (yun) { // YunBucks Leaderboard
+            const topUsers = await getTopUsers(interaction.guild.members.fetch(), 10);
 
-        if (yun) {
-            topUsers = await getTopUsers(interaction.guild.members.fetch(), 10);
-        } else {
-            topUsers = await getTopSex(interaction.guild.members.fetch(), 10);
-        }
+            const promises = topUsers.map(async (user, index) => ({
+                name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
+                value: `Net Worth: ¥${calculateNetWorth(user)}`
+            }));
 
-        const embed = new EmbedBuilder()
-            .setTitle(`${yun ? "**Yun Bucks** Leaderboard Net Worth!!!" : "Sex leaderboard :smiling_imp:"}`)
-            .setColor(`${yun ? "Green" : "Red"}`);
+            const embed = new EmbedBuilder();
 
-        promises = topUsers.map(async (user, index) => ({
-            name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
-            value: `${yun ? "Net Worth: ¥" : "Total Sex: "}${yun ? calculateNetWorth(user as IUser) : (user as ISex).total}`,
-        }));
+            embed.setTitle("**Yun Bucks** Leaderboard Net Worth!!!")
+                 .setColor("Green")
+                 .addFields(await Promise.all(promises))
 
-        if (yun) {
-            embed.addFields(await Promise.all(promises));
-        } else {
-            topStreak = await getTopSexStreak(interaction.guild.members.fetch(), 10);
+            return await interaction.reply({ embeds: [embed] });
+        } else { // Sex Leaderboard
+            const topSex = await getTopSex(interaction.guild.members.fetch(), 10);
+            const topStreak = await getTopSexStreak(interaction.guild.members.fetch(), 10);
+
+            const promises = topSex.map(async (user, index) => ({
+                name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
+                value: `Total Sex: ${user.total}`
+            }));
+
             const highestStreaks = topStreak.map(async (user, index) => ({
                 name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
                 value: `Current Streak: ${user.streak}`
             }));
 
-            embed.addFields(
-                { name: "\u200B", value: "**Total Sex**" },
-                ...(await Promise.all(promises)),
-                { name: "\u200B", value: "**Highest Sex Streak!!**" },
-                ...(await Promise.all(highestStreaks))
-            );
+            const {embed, row} = await displayInteraction(promises, highestStreaks, true);
+
+            const response = await interaction.reply({ 
+                embeds: [embed],
+                components: [row],
+            });
+
+            const collectorFilter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
+
+            // Listen for interactions on the buttons
+            const collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 60000 });
+
+            collector.on("collect", async (choice: MessageComponentInteraction) => {
+                const { embed, row } = await displayInteraction(promises, highestStreaks, choice.customId === "totalSex");
+
+                await choice.update({
+                    embeds: [embed],
+                    components: [row],
+                });
+            });
+
         }
-        return interaction.reply({ embeds: [embed] });
     },
     cooldown: 5
 }
