@@ -21,16 +21,23 @@ const event: BotEvent = {
             if (!sex) {
                 message.reply("OMG its your first sex!!! <:Jonathan:1217063765518848011>");
                 createSex(userID);
-            } else if (sex.date.getFullYear() == date.getFullYear() && sex.date.getMonth() == date.getMonth() && sex.date.getDate() == date.getDate()) {
-                addTotal(userID);
-            } else if (((sex.date.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)) == 1) {
-                addStreak(userID);
-                addTotal(userID);
-                message.reply(`${message.author}, first **sex** of the day!!!! <:Jonathan:1217063765518848011>\nEpic sex streak of: ${sex.streak + 1}`);
             } else {
-                resetStreak(userID);
                 addTotal(userID);
-                message.reply(`${message.author}, chat this is so sad :( <:Jonathan:1217063765518848011>\nYou lost the sex streaks :pensive:, now its just: ${sex.streak}`);
+                const previousDate = new Date(sex.date);
+                previousDate.setHours(0, 0, 0, 0); // So its midnight
+                const nowDate = new Date();
+                nowDate.setHours(0, 0, 0, 0);
+
+                const difference = (nowDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+                if (difference == 1) {
+                    setDate(userID);
+                    addStreak(userID);
+                    message.reply(`${message.author}, first **sex** of the day!!!! <:Jonathan:1217063765518848011>\nEpic sex streak of: ${sex.streak + 1}`);
+                } else if (difference > 1) {
+                    setDate(userID);
+                    resetStreak(userID);
+                    message.reply(`${message.author}, chat this is so sad :( <:Jonathan:1217063765518848011>\nYou lost the sex streaks :pensive:, now its just: 1`);
+                }
             }
         }
 
