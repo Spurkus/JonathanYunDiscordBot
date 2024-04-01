@@ -2,7 +2,7 @@ import { EmbedBuilder, SlashCommandBuilder, User, ButtonBuilder, ButtonStyle, Ac
 import { SlashCommand } from "../types";
 import { getUser, createUser, removeFromWallet, addToWallet } from "../database";
 
-const game = (gamble: number, streak: number) => {
+const game = (gamble: number, streak: number, disable: boolean) => {
     const embed = new EmbedBuilder()
         .setTitle("Edging Streak Game!!!")
         .setDescription(`Don't edge too hard or you'll bust :face_with_hand_over_mouth:\n**💰 Gamble:** ${gamble}\n**🔥 Streak:** ${streak}`)
@@ -12,12 +12,14 @@ const game = (gamble: number, streak: number) => {
         .setCustomId("edge")
         .setLabel("Edge")
         .setEmoji("🥴")
+        .setDisabled(disable)
         .setStyle(ButtonStyle.Success);
 
     const cashout = new ButtonBuilder()
         .setCustomId("cashout")
         .setLabel("Cash Out")
         .setEmoji("💸")
+        .setDisabled(disable)
         .setStyle(ButtonStyle.Danger);
 
     const row = new ActionRowBuilder<ButtonBuilder>()
@@ -30,7 +32,7 @@ const bust = (streak: number): boolean => {
     const probability = Math.random();
     let sum = 0;
     for (let k = 1; k <= streak; k++) {
-        sum += (1/10) * Math.pow(17/20, k-1);
+        sum += (1/20) * Math.pow(8/10, k-1);
     }
 
     return probability < sum;
@@ -76,7 +78,7 @@ const command: SlashCommand = {
             if (gamble > user.wallet) return interaction.reply("You don't have that amount of **YunBucks** in your wallet to gamble");
         }
 
-        const {embed, row} = game(gamble, streak);
+        const {embed, row} = game(gamble, streak, false);
 
         const response = await interaction.reply({ 
             embeds: [embed],
@@ -92,24 +94,35 @@ const command: SlashCommand = {
             if (choice.customId == "cashout") {
                 const money = Math.round(gamble*(Math.pow(1.08, streak)));
                 addToWallet(userID, money - gamble);
-                interaction.channel?.send(`Nice! you edged **${streak}** times, pretty epic! You get an extra ¥${money - gamble} **YunBucks**`);
+                interaction.channel?.send(`Nice! ${interaction.member} edged **${streak}** times, pretty epic! You get an extra ¥${money - gamble} **YunBucks**`);
+                const { embed, row } = await game(money, streak, true);
+                await choice.update({
+                    embeds: [embed],
+                    components: [row]
+                });
                 collector.stop();
                 return;
             }
 
             if (bust(streak + 1)) {
                 removeFromWallet(userID, gamble);
-                const cum = new AttachmentBuilder("https://media1.tenor.com/m/D2ztF2WMSDkAAAAd/cum.gif");
+                const cum = new EmbedBuilder().setImage("https://media1.tenor.com/m/D2ztF2WMSDkAAAAd/cum.gif");
                 interaction.channel?.send({
-                    content: `Oh no!!! You edged too hard and busted! You had an edging streak of **${streak}**!`,
-                    files: [cum]
+                    content: `Oh no!!! ${interaction.member} edged too hard and busted! You had an edging streak of **${streak}**!`,
+                    embeds: [cum]
+                });
+                const money = Math.round(gamble*(Math.pow(1.08, streak)));
+                const { embed, row } = await game(money, streak, true);
+                await choice.update({
+                    embeds: [embed],
+                    components: [row]
                 });
                 collector.stop();
                 return;
             } else {
                 streak += 1;
                 const money = Math.round(gamble*(Math.pow(1.08, streak)));
-                const { embed, row } = await game(money, streak);
+                const { embed, row } = await game(money, streak, false);
 
                 await choice.update({
                     embeds: [embed],
