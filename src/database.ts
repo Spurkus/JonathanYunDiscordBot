@@ -76,7 +76,7 @@ export const addStreak = async (userId: string): Promise<ISex | null> => {
 
 export const resetStreak = async (userId: string): Promise<ISex | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
-    return SexModel.findOneAndUpdate({ userId }, { $set: { streak: 0 } }, { new: true }).exec();
+    return SexModel.findOneAndUpdate({ userId }, { $set: { streak: 1 } }, { new: true }).exec();
 }
 
 export const setDate = async (userId: string): Promise<ISex | null> => {
