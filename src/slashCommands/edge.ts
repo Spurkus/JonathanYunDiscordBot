@@ -99,7 +99,7 @@ const command: SlashCommand = {
 
         collector.on("collect", async (choice: MessageComponentInteraction) => {
             if (choice.customId == "cashout") {
-                const money = Math.round(gamble*(Math.pow(1.1, Math.pow(streak, streak))));
+                const money = Math.round(gamble*(Math.pow(1.1, streak)));
                 addToWallet(userID, money - gamble);
                 interaction.channel?.send(`Nice! ${interaction.member} edged **${streak}** times, pretty epic! You get an extra ¥${money - gamble} **YunBucks**`);
                 const { embed, row } = await game(money, streak, true);
@@ -120,7 +120,7 @@ const command: SlashCommand = {
                     content: `Oh no!!! ${interaction.member} edged too hard and busted! You had an edging streak of **${streak}**!`,
                     embeds: [cum]
                 });
-                const money = Math.round(gamble*(Math.pow(1.1, Math.pow(streak, streak))));
+                const money = Math.round(gamble*(Math.pow(1.1, streak)));
                 const { embed, row } = await game(money, streak, true);
                 await choice.update({
                     embeds: [embed],
@@ -132,7 +132,7 @@ const command: SlashCommand = {
                 streak += 1;
                 addEdgeTotal(userID);
                 setEdgeHighest(userID, Math.max(edger.highest, streak));
-                const money = Math.round(gamble*(Math.pow(1.1, Math.pow(streak, streak))));
+                const money = Math.round(gamble*(Math.pow(1.1, streak)));
                 const { embed, row } = await game(money, streak, false);
 
                 await choice.update({
