@@ -1,4 +1,4 @@
-import { EmbedBuilder, SlashCommandBuilder, User, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageComponentInteraction } from "discord.js"
+import { EmbedBuilder, SlashCommandBuilder, User, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageComponentInteraction, AttachmentBuilder } from "discord.js"
 import { SlashCommand } from "../types";
 import { getUser, createUser, removeFromWallet, addToWallet } from "../database";
 
@@ -98,7 +98,11 @@ const command: SlashCommand = {
 
             if (bust(streak + 1)) {
                 removeFromWallet(userID, gamble);
-                interaction.channel?.send(`Oh no!!! You edged too hard and busted! You had an edging streak of **${streak}**!`);
+                const cum = new AttachmentBuilder("https://tenor.com/view/cum-gif-20534148");
+                interaction.channel?.send({
+                    content: `Oh no!!! You edged too hard and busted! You had an edging streak of **${streak}**!`,
+                    files: [cum]
+                });
                 return;
             } else {
                 streak += 1;
