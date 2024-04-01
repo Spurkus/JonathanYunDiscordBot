@@ -92,7 +92,8 @@ const command: SlashCommand = {
             if (choice.customId == "cashout") {
                 const money = Math.round(gamble*(Math.pow(1.08, streak)));
                 addToWallet(userID, money - gamble);
-                interaction.channel?.send(`Nice! you edged **${streak}** times, pretty epic! You get ¥${money - gamble} extra **YunBucks**`);
+                interaction.channel?.send(`Nice! you edged **${streak}** times, pretty epic! You get an extra ¥${money - gamble} **YunBucks**`);
+                collector.stop();
                 return;
             }
 
@@ -103,6 +104,7 @@ const command: SlashCommand = {
                     content: `Oh no!!! You edged too hard and busted! You had an edging streak of **${streak}**!`,
                     files: [cum]
                 });
+                collector.stop();
                 return;
             } else {
                 streak += 1;
