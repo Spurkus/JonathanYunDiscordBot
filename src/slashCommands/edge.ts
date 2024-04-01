@@ -32,7 +32,7 @@ const bust = (streak: number): boolean => {
     const probability = Math.random();
     let sum = 0;
     for (let k = 1; k <= streak; k++) {
-        sum += (1/20) * Math.pow(8/10, k-1);
+        sum += (1/10) * Math.pow(8/10, k-1);
     }
 
     return probability < sum;
