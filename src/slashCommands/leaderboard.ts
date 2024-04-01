@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, MessageComponentInteraction } from "discord.js"
 import { SlashCommand } from "../types";
-import { calculateNetWorth, getTopUsers, getTopSex, getTopSexStreak } from "../database";
+import { calculateNetWorth, getTopUsers, getTopSex, getTopSexStreak, getTopEdge, getTopEdgeHighest } from "../database";
 import { capitalisedName } from "../functions";
 
 type Position = Promise<{ name: string; value: string; }>[]
@@ -31,7 +31,7 @@ const createName = (namePlacement: string): string => {
     return getTrophyEmoji(parseInt(namePlacement.charAt(0))) + namePlacement
 }
 
-const displayInteraction = async (promises: Position, highestStreaks: Position, total: boolean): Promise<DisplayResult> => {
+const displayInteractionSex = async (promises: Position, highestStreaks: Position, total: boolean): Promise<DisplayResult> => {
     const totalSex = new ButtonBuilder()
         .setCustomId("totalSex")
         .setLabel("Total Sex")
@@ -54,7 +54,6 @@ const displayInteraction = async (promises: Position, highestStreaks: Position, 
             .setTitle("Sex Leaderboard :smiling_imp:")
             .setColor("Red")
             .addFields(
-            { name: "❤️❤️❤️❤️❤️❤️", value: "**Total Sex**" },
             ...(await Promise.all(promises)),
         );
 
@@ -64,7 +63,44 @@ const displayInteraction = async (promises: Position, highestStreaks: Position, 
             .setTitle("Sex Leaderboard :smiling_imp:")
             .setColor("Red")
             .addFields(
-            { name: "❤️❤️❤️❤️❤️❤️", value: "**Highest Sex Streak!!**" },
+            ...(await Promise.all(highestStreaks))
+        );
+        return {embed: embedStreak, row};
+    }
+}
+
+const displayInteractionEdge = async (promises: Position, highestStreaks: Position, total: boolean): Promise<DisplayResult> => {
+    const totalEdge = new ButtonBuilder()
+        .setCustomId("totalEdge")
+        .setLabel("Total Edges")
+        .setEmoji("💪")
+        .setDisabled(total)
+        .setStyle(ButtonStyle.Success);
+
+    const streakEdge = new ButtonBuilder()
+        .setCustomId("streakEdge")
+        .setLabel("Highest Edging Streak")
+        .setEmoji("🔥")
+        .setDisabled(!total)
+        .setStyle(ButtonStyle.Danger);
+
+    const row = new ActionRowBuilder<ButtonBuilder>()
+        .addComponents(totalEdge, streakEdge);
+
+    if (total) {
+        const embedTotal = new EmbedBuilder()
+            .setTitle("Edge Leaderboard :milk:")
+            .setColor("White")
+            .addFields(
+            ...(await Promise.all(promises)),
+        );
+
+        return {embed: embedTotal, row};
+    } else {
+        const embedStreak = new EmbedBuilder()
+            .setTitle("Edge Leaderboard :milk:")
+            .setColor("White")
+            .addFields(
             ...(await Promise.all(highestStreaks))
         );
         return {embed: embedStreak, row};
@@ -80,7 +116,8 @@ const command: SlashCommand = {
         .setDescription("The type of leaderboard you want to see")
         .addChoices(
             { name: "YunBucks", value: "yunbucks" } ,
-            { name: "Sex", value: "sex" }
+            { name: "Sex", value: "sex" },
+            { name: "Edge", value: "edge" }
         )
         .setRequired(true)
     })
@@ -92,9 +129,8 @@ const command: SlashCommand = {
         const type = interaction.options.getString("type");
 
         if (!type) return interaction.reply("You must select a leaderboard type :3")
-        const yun = type == "yunbucks";
 
-        if (yun) { // YunBucks Leaderboard
+        if (type == "yunbucks") { // YunBucks Leaderboard
             const topUsers = await getTopUsers(interaction.guild.members.fetch(), 10);
 
             const promises = topUsers.map(async (user, index) => ({
@@ -109,7 +145,7 @@ const command: SlashCommand = {
                  .addFields(await Promise.all(promises))
 
             return await interaction.reply({ embeds: [embed] });
-        } else { // Sex Leaderboard
+        } else if (type == "sex") { // Sex Leaderboard
             const topSex = await getTopSex(interaction.guild.members.fetch(), 10);
             const topStreak = await getTopSexStreak(interaction.guild.members.fetch(), 10);
 
@@ -123,7 +159,7 @@ const command: SlashCommand = {
                 value: `Current Streak: ${user.streak}`
             }));
 
-            const {embed, row} = await displayInteraction(promises, highestStreaks, true);
+            const {embed, row} = await displayInteractionSex(promises, highestStreaks, true);
 
             const response = await interaction.reply({ 
                 embeds: [embed],
@@ -136,14 +172,47 @@ const command: SlashCommand = {
             const collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 60000 });
 
             collector.on("collect", async (choice: MessageComponentInteraction) => {
-                const { embed, row } = await displayInteraction(promises, highestStreaks, choice.customId === "totalSex");
+                const { embed, row } = await displayInteractionSex(promises, highestStreaks, choice.customId === "totalSex");
 
                 await choice.update({
                     embeds: [embed],
                     components: [row],
                 });
             });
+        } else { // Edge Leaderboard
+            const topEdge = await getTopEdge(interaction.guild.members.fetch(), 10);
+            const topStreak = await getTopEdgeHighest(interaction.guild.members.fetch(), 10);
 
+            const promises = topEdge.map(async (user, index) => ({
+                name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
+                value: `Total Edge: ${user.total}`
+            }));
+
+            const highestStreaks = topStreak.map(async (user, index) => ({
+                name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
+                value: `Highest Edging Streak: ${user.highest}`
+            }));
+
+            const {embed, row} = await displayInteractionEdge(promises, highestStreaks, true);
+
+            const response = await interaction.reply({ 
+                embeds: [embed],
+                components: [row],
+            });
+
+            const collectorFilter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
+
+            // Listen for interactions on the buttons
+            const collector = response.createMessageComponentCollector({ filter: collectorFilter, time: 60000 });
+
+            collector.on("collect", async (choice: MessageComponentInteraction) => {
+                const { embed, row } = await displayInteractionEdge(promises, highestStreaks, choice.customId === "totalEdge");
+
+                await choice.update({
+                    embeds: [embed],
+                    components: [row],
+                });
+            });
         }
     },
     cooldown: 5

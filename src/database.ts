@@ -1,8 +1,9 @@
 import { Collection, GuildMember } from "discord.js";
 import { connection } from "mongoose";
-import { IUser, ISex } from "./types";
+import { IUser, ISex, IEdge } from "./types";
 import UserModel from "./schemas/User";
 import SexModel from "./schemas/Sex";
+import EdgeModel from "./schemas/Edge";
 
 export const getUser = async (userId: string): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
@@ -105,5 +106,49 @@ export const getTopSexStreak = async (membersPromise: Promise<Collection<string,
     const serverUserIds: Set<string> = new Set(members.map(member => member.id));
     const serverSexUsers = allSexUsers.filter(user => serverUserIds.has(user.userId));
     const sortedUsers = serverSexUsers.sort((a, b) => b.streak - a.streak); // Sorting based on sex streak
+    return sortedUsers.slice(0, limit);
+}
+
+export const getEdger = async (userId: string): Promise<IEdge | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return EdgeModel.findOne({ userId }).exec();
+}
+
+export const createEdger = async (userId: string): Promise<IEdge> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    const edge = new EdgeModel({ userId });
+    return edge.save();
+}
+
+export const addEdgeTotal = async (userId: string): Promise<IEdge | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return EdgeModel.findOneAndUpdate({ userId }, { $inc: { total: 1 } }, { new: true }).exec();
+}
+
+export const setEdgeHighest = async (userId: string, edge: number): Promise<IEdge | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return EdgeModel.findOneAndUpdate({ userId }, { $set: { highest: edge } }, { new: true }).exec();
+}
+
+export const getAllEdgers = async (): Promise<IEdge[]> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return EdgeModel.find().exec()
+}
+
+export const getTopEdge = async (membersPromise: Promise<Collection<string, GuildMember>>, limit: number): Promise<IEdge[]> => {
+    const members = await membersPromise;
+    const allEdgers = await getAllEdgers(); // Function to get all sex users from your database
+    const serverUserIds: Set<string> = new Set(members.map(member => member.id));
+    const serverEdgers = allEdgers.filter(user => serverUserIds.has(user.userId));
+    const sortedUsers = serverEdgers.sort((a, b) => b.total - a.total); // Sorting based on sex
+    return sortedUsers.slice(0, limit);
+}
+
+export const getTopEdgeHighest = async (membersPromise: Promise<Collection<string, GuildMember>>, limit: number): Promise<IEdge[]> => {
+    const members = await membersPromise;
+    const allEdgers = await getAllEdgers(); // Function to get all sex users from your database
+    const serverUserIds: Set<string> = new Set(members.map(member => member.id));
+    const serverEdgers = allEdgers.filter(user => serverUserIds.has(user.userId));
+    const sortedUsers = serverEdgers.sort((a, b) => b.highest - a.highest); // Sorting based on sex
     return sortedUsers.slice(0, limit);
 }

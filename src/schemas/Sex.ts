@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import { ISex } from "../types";
-import { getDateString } from "../functions";
 
 const defaultDate = new Date();
 

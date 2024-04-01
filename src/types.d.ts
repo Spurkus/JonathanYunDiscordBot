@@ -25,6 +25,12 @@ export interface IUser extends mongoose.Document {
     wallet: number;
 }
 
+export interface IEdge extends mongoose.Document {
+    userId: string;
+    total: number;
+    highest: number;
+}
+
 export interface ISex extends mongoose.Document {
     userId: string;
     date: Date;

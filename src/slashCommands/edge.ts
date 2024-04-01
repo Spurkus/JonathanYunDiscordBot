@@ -1,6 +1,6 @@
-import { EmbedBuilder, SlashCommandBuilder, User, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageComponentInteraction, AttachmentBuilder } from "discord.js"
+import { EmbedBuilder, SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageComponentInteraction, AttachmentBuilder } from "discord.js"
 import { SlashCommand } from "../types";
-import { getUser, createUser, removeFromWallet, addToWallet } from "../database";
+import { getUser, createUser, removeFromWallet, addToWallet, addEdgeTotal, setEdgeHighest, getEdger, createEdger } from "../database";
 
 const game = (gamble: number, streak: number, disable: boolean) => {
     const embed = new EmbedBuilder()
@@ -32,7 +32,7 @@ const bust = (streak: number): boolean => {
     const probability = Math.random();
     let sum = 0;
     for (let k = 1; k <= streak; k++) {
-        sum += (1/10) * Math.pow(8/10, k-1);
+        sum += (1/15) * Math.pow(7/10, k-1);
     }
 
     return probability < sum;
@@ -52,11 +52,18 @@ const command: SlashCommand = {
     execute: async interaction => {
         const userID = interaction.user.id;
         const user = await getUser(userID);
+        const edger = await getEdger(userID);
 
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
             return interaction.reply("You have not made a bank account in 'Yun Banks™' yet, and you're already edging smh.\nIt's ok, I will make one for you <3")
+        }
+
+        if (!edger) {
+            createEdger(userID);
+            addToWallet(userID, 1000);
+            return interaction.reply("Ooooooh, I see this is your first time edging!! Here's a ¥1000 **YunBucks** to get you started <:Jonathan:1217063765518848011>");
         }
 
         const amount = interaction.options.getString("amount");
@@ -105,6 +112,8 @@ const command: SlashCommand = {
             }
 
             if (bust(streak + 1)) {
+                addEdgeTotal(userID);
+                setEdgeHighest(userID, Math.max(edger.highest, streak));
                 removeFromWallet(userID, gamble);
                 const cum = new EmbedBuilder().setImage("https://media1.tenor.com/m/D2ztF2WMSDkAAAAd/cum.gif");
                 interaction.channel?.send({
@@ -121,6 +130,8 @@ const command: SlashCommand = {
                 return;
             } else {
                 streak += 1;
+                addEdgeTotal(userID);
+                setEdgeHighest(userID, Math.max(edger.highest, streak));
                 const money = Math.round(gamble*(Math.pow(1.2, streak)));
                 const { embed, row } = await game(money, streak, false);
 

@@ -1,5 +1,5 @@
 import { ChannelType, Message } from "discord.js";
-import { checkPermissions, getDateString, getGuildOption, sendTimedMessage } from "../functions";
+import { checkPermissions, getGuildOption, sendTimedMessage } from "../functions";
 import { BotEvent } from "../types";
 import mongoose from "mongoose";
 import { addStreak, addTotal, createSex, getSex, resetStreak, setDate } from "../database";
