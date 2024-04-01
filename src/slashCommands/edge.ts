@@ -98,7 +98,7 @@ const command: SlashCommand = {
 
             if (bust(streak + 1)) {
                 removeFromWallet(userID, gamble);
-                const cum = new AttachmentBuilder("https://tenor.com/view/cum-gif-20534148");
+                const cum = new AttachmentBuilder("https://media1.tenor.com/m/D2ztF2WMSDkAAAAd/cum.gif");
                 interaction.channel?.send({
                     content: `Oh no!!! You edged too hard and busted! You had an edging streak of **${streak}**!`,
                     files: [cum]
