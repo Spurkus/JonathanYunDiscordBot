@@ -30,7 +30,7 @@ const command: SlashCommand = {
             const all = user.bank;
             addToWallet(userID, all);
             removeFromBank(userID, all);
-            return interaction.reply(`You deposited ¥${all} **YunBucks** into your bank`);
+            return interaction.reply(`You withdrew ¥${all} **YunBucks** into your wallet`);
         }
 
         if (!/^\d+$/.test(amount)) return interaction.reply("Withdraw amount must be positive numbers (or 'all') you baka >.<");
