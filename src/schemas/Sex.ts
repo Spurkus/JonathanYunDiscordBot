@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import { ISex } from "../types";
 
 const defaultDate = new Date();
+defaultDate.setHours(0, 0, 0, 0);
 
 const SexSchema = new Schema({
     userId: { type: String, required: true, unique: true },
