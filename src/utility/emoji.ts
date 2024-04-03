@@ -3,7 +3,7 @@ import { Client, GuildEmoji } from "discord.js"
 const getEmoji = async (client: Client) => {
     var emoji: { [key: string]: GuildEmoji | undefined } = {}
     var emojiID = {
-        jonathan: "<:jonathan:1217063765518848011>",
+        jonathan: "1217063765518848011",
     }
 
     for (const [key, value] of Object.entries(emojiID)) {
