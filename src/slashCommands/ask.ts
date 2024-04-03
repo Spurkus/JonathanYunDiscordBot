@@ -39,11 +39,10 @@ const command: SlashCommand = {
       const response = completion.choices[0]?.message.content ?? null;
 
       if (response !== null) {
-        await interaction.editReply({ content: response, ephemeral: false });
+        await interaction.editReply({ content: response });
       } else {
         await interaction.editReply({
-          content: "No response from the AI.",
-          ephemeral: false,
+          content: "No response from the AI."
         });
       }
     } catch (error) {
