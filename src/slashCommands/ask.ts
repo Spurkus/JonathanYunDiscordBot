@@ -30,6 +30,7 @@ const command: SlashCommand = {
         return;
       }
 
+      await interaction.deferReply();
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: message+process.env.AI_PROMPT }],
@@ -38,16 +39,16 @@ const command: SlashCommand = {
       const response = completion.choices[0]?.message.content ?? null;
 
       if (response !== null) {
-        await interaction.reply({ content: response, ephemeral: false });
+        await interaction.editReply({ content: response, ephemeral: false });
       } else {
-        await interaction.reply({
+        await interaction.editReply({
           content: "No response from the AI.",
           ephemeral: false,
         });
       }
     } catch (error) {
       console.error(error);
-      await interaction.reply({
+      await interaction.editReply({
         content: "Sorry, there was an error processing your request!",
         ephemeral: true,
       });
