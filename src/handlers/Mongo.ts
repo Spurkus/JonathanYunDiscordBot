@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { color } from "../functions";
+import { color } from "../utility/functions";
 
 module.exports = () => {
     const MONGO_URI = process.env.MONGO_URI

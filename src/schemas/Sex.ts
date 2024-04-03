@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { ISex } from "../types";
+import { ISex } from "../utility/types";
 
 const defaultDate = new Date();
 defaultDate.setHours(0, 0, 0, 0);

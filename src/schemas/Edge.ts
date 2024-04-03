@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { IEdge } from "../types";
+import { IEdge } from "../utility/types";
 
 const EdgeSchema = new Schema({
     userId: { type: String, required: true, unique: true },

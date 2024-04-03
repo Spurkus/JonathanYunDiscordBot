@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
-import { imageFinder } from "../functions";
-import { SlashCommand } from "../types";
+import { imageFinder } from "../utility/functions";
+import { SlashCommand } from "../utility/types";
 import { TheCatAPI } from "@thatapicompany/thecatapi";
 
 const catApiKey = process.env.CATAPI_KEY;

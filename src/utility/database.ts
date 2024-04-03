@@ -1,9 +1,10 @@
 import { Collection, GuildMember } from "discord.js";
 import { connection } from "mongoose";
-import { IUser, ISex, IEdge } from "./types";
-import UserModel from "./schemas/User";
-import SexModel from "./schemas/Sex";
-import EdgeModel from "./schemas/Edge";
+import { IUser, ISex, IEdge, IItem } from "./types";
+import UserModel from "../schemas/User";
+import SexModel from "../schemas/Sex";
+import EdgeModel from "../schemas/Edge";
+import ItemModel from "../schemas/Item";
 
 export const getUser = async (userId: string): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
@@ -137,18 +138,29 @@ export const getAllEdgers = async (): Promise<IEdge[]> => {
 
 export const getTopEdge = async (membersPromise: Promise<Collection<string, GuildMember>>, limit: number): Promise<IEdge[]> => {
     const members = await membersPromise;
-    const allEdgers = await getAllEdgers(); // Function to get all sex users from your database
+    const allEdgers = await getAllEdgers(); // Function to get all edge users from your database
     const serverUserIds: Set<string> = new Set(members.map(member => member.id));
     const serverEdgers = allEdgers.filter(user => serverUserIds.has(user.userId));
-    const sortedUsers = serverEdgers.sort((a, b) => b.total - a.total); // Sorting based on sex
+    const sortedUsers = serverEdgers.sort((a, b) => b.total - a.total); // Sorting based on total
     return sortedUsers.slice(0, limit);
 }
 
 export const getTopEdgeHighest = async (membersPromise: Promise<Collection<string, GuildMember>>, limit: number): Promise<IEdge[]> => {
     const members = await membersPromise;
-    const allEdgers = await getAllEdgers(); // Function to get all sex users from your database
+    const allEdgers = await getAllEdgers(); // Function to get all edge users from your database
     const serverUserIds: Set<string> = new Set(members.map(member => member.id));
     const serverEdgers = allEdgers.filter(user => serverUserIds.has(user.userId));
-    const sortedUsers = serverEdgers.sort((a, b) => b.highest - a.highest); // Sorting based on sex
+    const sortedUsers = serverEdgers.sort((a, b) => b.highest - a.highest); // Sorting based on highest edge streak
     return sortedUsers.slice(0, limit);
+}
+
+export const getItem = async (id: string): Promise<IItem | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return ItemModel.findOne({ id }).exec();
+}
+
+export const createItem = async (id: String, name: String, description: String, consumable: boolean, giftable: boolean): Promise<IItem> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    const item = new ItemModel({ id, name, description, consumable, giftable });
+    return item.save();
 }

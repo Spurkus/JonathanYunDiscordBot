@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, MessageComponentInteraction } from "discord.js"
-import { SlashCommand } from "../types";
-import { calculateNetWorth, getTopUsers, getTopSex, getTopSexStreak, getTopEdge, getTopEdgeHighest } from "../database";
-import { capitalisedName } from "../functions";
+import { SlashCommand } from "../utility/types";
+import { calculateNetWorth, getTopUsers, getTopSex, getTopSexStreak, getTopEdge, getTopEdgeHighest } from "../utility/database";
+import { capitalisedName } from "../utility/functions";
 
 type Position = Promise<{ name: string; value: string; }>[]
 interface DisplayResult {

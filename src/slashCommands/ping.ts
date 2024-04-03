@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
-import { getThemeColor } from "../functions";
-import { SlashCommand } from "../types";
+import { getThemeColor } from "../utility/functions";
+import { SlashCommand } from "../utility/types";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()

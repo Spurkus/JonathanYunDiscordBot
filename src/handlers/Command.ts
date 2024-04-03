@@ -2,8 +2,8 @@ import { Client, Routes, SlashCommandBuilder } from "discord.js";
 import { REST } from "@discordjs/rest"
 import { readdirSync } from "fs";
 import { join } from "path";
-import { color } from "../functions";
-import { SlashCommand } from "../types";
+import { color } from "../utility/functions";
+import { SlashCommand } from "../utility/types";
 
 module.exports = (client : Client) => {
     const slashCommands : SlashCommandBuilder[] = []

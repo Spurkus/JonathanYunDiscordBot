@@ -1,6 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageComponentInteraction, AttachmentBuilder } from "discord.js"
-import { SlashCommand } from "../types";
-import { getUser, createUser, removeFromWallet, addToWallet, addEdgeTotal, setEdgeHighest, getEdger, createEdger } from "../database";
+import { SlashCommand } from "../utility/types";
+import { getUser, createUser, removeFromWallet, addToWallet, addEdgeTotal, setEdgeHighest, getEdger, createEdger } from "../utility/database";
+import getEmoji from "../utility/emoji";
 
 const game = (gamble: number, streak: number, disable: boolean) => {
     const embed = new EmbedBuilder()
@@ -51,6 +52,7 @@ const command: SlashCommand = {
     ,
     execute: async interaction => {
         const userID = interaction.user.id;
+        const emoji = await getEmoji(interaction.client);
         const user = await getUser(userID);
         const edger = await getEdger(userID);
 
@@ -63,7 +65,7 @@ const command: SlashCommand = {
         if (!edger) {
             createEdger(userID);
             addToWallet(userID, 1000);
-            return interaction.reply("Ooooooh, I see this is your first time edging!! Here's a ¥1000 **YunBucks** to get you started <:Jonathan:1217063765518848011>");
+            return interaction.reply(`Ooooooh, I see this is your first time edging!! Here's a ¥1000 **YunBucks** to get you started ${emoji.jonathan}`);
         }
 
         const amount = interaction.options.getString("amount");

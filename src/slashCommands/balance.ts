@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
-import { SlashCommand } from "../types";
-import { getUser, createUser } from "../database";
-import { capitalisedName } from "../functions";
+import { SlashCommand } from "../utility/types";
+import { getUser, createUser } from "../utility/database";
+import { capitalisedName } from "../utility/functions";
 
 const formatName = (name: string): string => {
     if (name[name.length - 1] == "s") {

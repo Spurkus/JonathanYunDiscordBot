@@ -1,11 +1,13 @@
-import { Client, GatewayIntentBits, Collection, PermissionFlagsBits,} from "discord.js";
+import { Client, GatewayIntentBits, Collection, GuildEmoji } from "discord.js";
 const { Guilds, MessageContent, GuildMessages, GuildMembers } = GatewayIntentBits
 const client = new Client({intents:[Guilds, MessageContent, GuildMessages, GuildMembers]})
-import { SlashCommand } from "./types";
+
+import { SlashCommand } from "./utility/types";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { join } from "path";
 import { addFieldToUsers } from "./scripts/script";
+import { createItem } from "./utility/database";
 config()
 
 client.slashCommands = new Collection<string, SlashCommand>()
@@ -18,5 +20,6 @@ readdirSync(handlersDir).forEach(handler => {
 })
 
 // addFieldToUsers();
+// createItem(0, "69 Coin Buff");
 
 client.login(process.env.TOKEN)

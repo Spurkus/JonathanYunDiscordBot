@@ -1,12 +1,13 @@
 import { ChannelType, Message } from "discord.js";
-import { checkPermissions, getGuildOption, sendTimedMessage } from "../functions";
-import { BotEvent } from "../types";
+import { BotEvent } from "../utility/types";
 import mongoose from "mongoose";
-import { addStreak, addTotal, createSex, getSex, resetStreak, setDate } from "../database";
+import { addStreak, addTotal, createSex, getSex, resetStreak, setDate } from "../utility/database";
+import getEmoji from "../utility/emoji";
 
 const event: BotEvent = {
     name: "messageCreate",
     execute: async (message: Message) => {
+        const emoji = await getEmoji(message.client);
         if (!message.member || message.member.user.bot) return;
         if (!message.guild) return;
         if (message.channel.type !== ChannelType.GuildText) return;
@@ -19,7 +20,7 @@ const event: BotEvent = {
         // Sex Daily
         if (message.content.toUpperCase().includes("SEX")) {
             if (!sex) {
-                message.reply("OMG its your first sex!!! <:Jonathan:1217063765518848011>");
+                message.reply(`OMG its your first sex!!! ${emoji.jonathan}`);
                 createSex(userID);
             } else {
                 addTotal(userID);
@@ -32,11 +33,11 @@ const event: BotEvent = {
                 if (difference == 1) {
                     setDate(userID);
                     addStreak(userID);
-                    message.reply(`${message.author}, first **sex** of the day!!!! <:Jonathan:1217063765518848011>\nEpic sex streak of: ${sex.streak + 1}`);
+                    message.reply(`${message.author}, first **sex** of the day!!!! ${emoji.jonathan}\nEpic sex streak of: ${sex.streak + 1}`);
                 } else if (difference > 1) {
                     setDate(userID);
                     resetStreak(userID);
-                    message.reply(`${message.author}, chat this is so sad :( <:Jonathan:1217063765518848011>\nYou lost the sex streaks :pensive:, now its just: 1`);
+                    message.reply(`${message.author}, chat this is so sad :( ${emoji.jonathan}\nYou lost the sex streaks :pensive:, now its just: 1`);
                 }
             }
         }

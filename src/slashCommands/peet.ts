@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
-import { imageFinder } from "../functions";
-import { SlashCommand } from "../types";
+import { imageFinder } from "../utility/functions";
+import { SlashCommand } from "../utility/types";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()

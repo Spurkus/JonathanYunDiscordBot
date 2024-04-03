@@ -38,6 +38,14 @@ export interface ISex extends mongoose.Document {
     streak: number;
 }
 
+export interface IItem extends mongoose.Document {
+    id: string;
+    name: string;
+    description: number;
+    consumable: boolean;
+    giftable: boolean;
+}
+
 export type GuildOption = keyof GuildOptions
 export interface BotEvent {
     name: string,
