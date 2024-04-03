@@ -48,8 +48,7 @@ const command: SlashCommand = {
     } catch (error) {
       console.error(error);
       await interaction.editReply({
-        content: "Sorry, there was an error processing your request!",
-        ephemeral: true,
+        content: "Sorry, there was an error processing your request!"
       });
     }
   },
