@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { SlashCommandBuilder } from "discord.js";
-import { SlashCommand } from "../types";
+import { SlashCommand } from "../utility/types";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
