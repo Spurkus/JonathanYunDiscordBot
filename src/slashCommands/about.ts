@@ -14,6 +14,7 @@ const command: SlashCommand = {
         .setThumbnail("https://i.imgur.com/E7fHQGR.png")
         .setColor(`Aqua`)
         .addFields(
+            { name: 'Website', value: '[Click here!](https://www.jonathanyun.com/)', inline : true },
             { name: 'Linkedin', value: '[Click here!](https://www.linkedin.com/in/thejonathanyun/)', inline : true },
             { name: 'Instagram', value: '[Click here!](https://www.instagram.com/mfw_jonathan/)', inline : true },
             { name: 'Github', value: '[Click here!](https://github.com/Spurkus/JonathanYunDiscordBot/)', inline : true }
