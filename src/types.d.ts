@@ -38,6 +38,13 @@ export interface ISex extends mongoose.Document {
     streak: number;
 }
 
+export interface IJob extends mongoose.Document {
+    userId: string;
+    date: Date;
+    cur: number;
+    streak: number;
+}
+
 export type GuildOption = keyof GuildOptions
 export interface BotEvent {
     name: string,

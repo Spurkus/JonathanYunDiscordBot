@@ -1,9 +1,10 @@
 import { Collection, GuildMember } from "discord.js";
 import { connection } from "mongoose";
-import { IUser, ISex, IEdge } from "./types";
+import { IUser, ISex, IEdge, IJob } from "./types";
 import UserModel from "./schemas/User";
 import SexModel from "./schemas/Sex";
 import EdgeModel from "./schemas/Edge";
+import JobModel from "./schemas/Job";
 
 export const getUser = async (userId: string): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
@@ -151,4 +152,27 @@ export const getTopEdgeHighest = async (membersPromise: Promise<Collection<strin
     const serverEdgers = allEdgers.filter(user => serverUserIds.has(user.userId));
     const sortedUsers = serverEdgers.sort((a, b) => b.highest - a.highest); // Sorting based on sex
     return sortedUsers.slice(0, limit);
+}
+
+export const getWorker = async (userId: string): Promise<IJob | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return JobModel.findOne({ userId }).exec();
+}
+
+export const getJob = async (userId: string): Promise<IJob | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    const job = await JobModel.findOne({ userId }).exec();
+    return job;
+};
+
+export const addJob = async (userId: string, job: number): Promise<IJob | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    const updatedJob = await JobModel.findOneAndUpdate({ userId }, { $set: { cur: job } }, { new: true }).exec();
+    return updatedJob;
+};
+
+export const createWorker = async (userId: string): Promise<IJob> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    const work = new JobModel({ userId });
+    return work.save();
 }
