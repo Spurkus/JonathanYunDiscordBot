@@ -5,7 +5,7 @@ import getEmoji from "../utility/emoji";
 
 const game = (gamble: number, streak: number, disable: boolean) => {
     const embed = new EmbedBuilder()
-        .setTitle("Edging Streak Game!!!")
+        .setTitle("**Edging Streak Game!!!**")
         .setDescription(`Don't edge too hard or you'll bust :face_with_hand_over_mouth:\n**💰 Gamble:** ${gamble}\n**🔥 Streak:** ${streak}`)
         .setColor("White")
 

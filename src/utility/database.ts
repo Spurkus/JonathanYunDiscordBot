@@ -1,6 +1,6 @@
 import { Collection, GuildMember } from "discord.js";
 import { connection } from "mongoose";
-import { IUser, ISex, IEdge, IItem } from "./types";
+import { IUser, ISex, IEdge, IItem, rarityType } from "./types";
 import UserModel from "../schemas/User";
 import SexModel from "../schemas/Sex";
 import EdgeModel from "../schemas/Edge";
@@ -159,8 +159,13 @@ export const getItem = async (id: string): Promise<IItem | null> => {
     return ItemModel.findOne({ id }).exec();
 }
 
-export const createItem = async (id: String, name: String, description: String, consumable: boolean, giftable: boolean): Promise<IItem> => {
+export const getItemName = async (name: string): Promise<IItem | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
-    const item = new ItemModel({ id, name, description, consumable, giftable });
+    return ItemModel.findOne({ name }).exec();
+}
+
+export const createItem = async (id: number, name: string, emoji: string, rarity: rarityType, description: string, price: number, consumable: boolean, giftable: boolean): Promise<IItem> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    const item = new ItemModel({ id, name, emoji, rarity, description, price, consumable, giftable });
     return item.save();
 }

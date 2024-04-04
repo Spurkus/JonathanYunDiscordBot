@@ -38,10 +38,16 @@ export interface ISex extends mongoose.Document {
     streak: number;
 }
 
+export type rarityType = "Special" | "Mythic" | "Legendary" | "Epic" | "Rare" | "Uncommon" | "Common";
+
+
 export interface IItem extends mongoose.Document {
-    id: string;
+    id: number;
     name: string;
-    description: number;
+    emoji: string;
+    rarity: rarityType;
+    description: string;
+    price: number;
     consumable: boolean;
     giftable: boolean;
 }

@@ -20,6 +20,6 @@ readdirSync(handlersDir).forEach(handler => {
 })
 
 // addFieldToUsers();
-// createItem(0, "69 Coin Buff");
+// createItem(1, "Shield of Yun", "shieldyun", "Rare", "A shield that when consumed, blocks the next 10 robs if someone tries to rob you!", 12000, true, true);
 
 client.login(process.env.TOKEN)
