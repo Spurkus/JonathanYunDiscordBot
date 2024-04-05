@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder, ColorResolvable } from "discord.js"
 import { SlashCommand, rarityType } from "../utility/types";
-import { getItemName } from "../utility/database";
+import { getItemName, getAllItems } from "../utility/database";
 import getEmoji from "../utility/emoji";
 
 const rarityColours: Record<rarityType, ColorResolvable> = {
@@ -21,9 +21,24 @@ const command: SlashCommand = {
             .setName("name")
             .setDescription("The name of the item's information/details you want to see")
             .setRequired(true)
+            .setAutocomplete(true)
     })
     .setDescription("Check an item's information/details")
     ,
+    autocomplete: async interaction => {
+        const focusedValue = interaction.options.getFocused();
+        const itemData = await getAllItems();
+        const choices = itemData.map((i) => ({ name: i.name, value: i.name }));
+
+        let filtered: { name: string, value: string }[] = []
+        for (let i = 0; i < choices.length; i++) {
+            const choice = choices[i];
+            if (choice.name.includes(focusedValue)) filtered.push(choice);
+        }
+        await interaction.respond(
+            filtered
+        );
+    },
     execute: async interaction => {
         const emoji = await getEmoji(interaction.client);
         const itemName = interaction.options.getString("name");

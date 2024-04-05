@@ -165,6 +165,11 @@ export const getItemName = async (name: string): Promise<IItem | null> => {
     return ItemModel.findOne({ name }).exec();
 }
 
+export const getAllItems = async (): Promise<IItem[]> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return ItemModel.find().exec()
+}
+
 export const createItem = async (id: number, name: string, emoji: string, rarity: rarityType, description: string, price: number, consumable: boolean, giftable: boolean): Promise<IItem> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
     const item = new ItemModel({ id, name, emoji, rarity, description, price, consumable, giftable });
