@@ -19,7 +19,7 @@ readdirSync(handlersDir).forEach(handler => {
     require(`${handlersDir}/${handler}`)(client)
 })
 
-// addFieldToUsers();
+// addFieldToUsers("active", []);
 // createItem(2, "Flower of Yun", "floweryun", "Common", "A cute flower :3", 500, false, true);
 
 client.login(process.env.TOKEN)

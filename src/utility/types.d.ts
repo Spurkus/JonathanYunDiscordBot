@@ -24,6 +24,7 @@ export interface IUser extends mongoose.Document {
     bank: number;
     wallet: number;
     inventory: Array<Array<number>>;
+    active: Array<Array<number>>;
 }
 
 export interface IEdge extends mongoose.Document {
