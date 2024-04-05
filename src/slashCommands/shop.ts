@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, Emoji } from "discord.js"
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
 import { SlashCommand } from "../utility/types";
 import { getAllItems } from "../utility/database";
 import getEmoji from "../utility/emoji";
