@@ -1,20 +1,18 @@
-import { Client, GuildEmoji } from "discord.js"
+import { Client, GuildEmoji } from "discord.js";
+import { EmojiMap } from "./types";
 
 const getEmoji = async (client: Client) => {
-    var emoji: { [key: string]: GuildEmoji | undefined } = {}
-    var emojiID = {
-        "jonathan": "1217063765518848011",
-        "69coin": "1225056226325303356",
-        "jonathicc": "1225042213868929104",
-        "jonuwu": "1225042266129961104",
-        "shieldyun": "1225286828525879347",
-    }
+    const guildId = process.env.GUILD_ID;
+    if (!guildId) { throw new Error('Guild ID is not defined in the environment variables.'); }
+    const guild = await client.guilds.fetch(guildId);
+    const emojis: EmojiMap  = (await guild).emojis.cache.reduce((acc: EmojiMap, emoji: GuildEmoji) => {
+        if (emoji.name != null) {
+            acc[emoji.name] = emoji;
+        }
+        return acc;
+    }, {});
 
-    for (const [key, value] of Object.entries(emojiID)) {
-        emoji[key] = client.emojis.cache.get(value);
-    }
+    return emojis;
+};
 
-    return emoji
-}
-
-export default getEmoji
+export default getEmoji;

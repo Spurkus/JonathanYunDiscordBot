@@ -23,7 +23,7 @@ export interface IUser extends mongoose.Document {
     userId: string;
     bank: number;
     wallet: number;
-    inventory: number[];
+    inventory: { itemId: number, amount: number }[];
 }
 
 export interface IEdge extends mongoose.Document {
@@ -85,3 +85,5 @@ declare module "discord.js" {
         cooldowns: Collection<string, number>
     }
 }
+
+export type EmojiMap = { [key: string]: GuildEmoji | undefined };
