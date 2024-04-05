@@ -40,7 +40,6 @@ export interface ISex extends mongoose.Document {
 
 export type rarityType = "Special" | "Mythic" | "Legendary" | "Epic" | "Rare" | "Uncommon" | "Common";
 
-
 export interface IItem extends mongoose.Document {
     id: number;
     name: string;
@@ -50,6 +49,13 @@ export interface IItem extends mongoose.Document {
     price: number;
     consumable: boolean;
     giftable: boolean;
+}
+
+export interface IJob extends mongoose.Document {
+    userId: string;
+    date: Date;
+    cur: number;
+    streak: number;
 }
 
 export type GuildOption = keyof GuildOptions
