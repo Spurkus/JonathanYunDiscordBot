@@ -6,8 +6,8 @@ import {
     MessageComponentInteraction,
     SlashCommandBuilder,
   } from 'discord.js';
-  import { SlashCommand } from '../types';
-  import { getJob, addJob, getWorker, createWorker, getUser, createUser } from '../database';
+  import { SlashCommand } from '../utility/types';
+  import { addJob, getWorker, createWorker, getUser, createUser } from '../utility/database';
   
   
   const jobs = new Map<string, number>([
@@ -48,43 +48,41 @@ import {
 
         const userID = interaction.user.id;
         const user = await getUser(userID);
-        const worker = await getWorker(userID);
+        let worker = await getWorker(userID);
 
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
             return interaction.reply("You have not made a bank account in 'Yun Banks™' yet, and you're already trying to get a job smh.\nIt's ok, I will make one for you <3")
         }
-        const userJob = await getJob(userID);
-        const curJob = userJob ? userJob.cur : 0;
+        const curJob = worker ? worker.cur : 0;
         if (!worker) {
-            createWorker(userID);
+            worker = await createWorker(userID);
         }
         
-        
-      const gameComponents = game(`Your current job is **${Array.from(jobs.keys())[curJob-1]}**`, false);
-      await interaction.reply(gameComponents);
-  
-      const filter = (i: MessageComponentInteraction) => i.user.id === userID;
-      const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
-  
-      collector?.on('collect', async (i: MessageComponentInteraction) => {
-        // Assuming a job ID or similar is passed as customId
-        const selectedJobId = i.customId;
-        await addJob(userID, parseInt(selectedJobId));
-        await i.update({ content: `Job selected successfully.`, components: [] });
-        collector.stop();
-      });
-  
-      collector?.on('end', async () => {
-        // Fetch the current job of the user to display
-        const userJob = await getJob(userID);
-        const curJob = userJob ? userJob.cur : 0;
-        
-        await interaction.followUp({ content: `Your current job is **${Array.from(jobs.keys())[curJob-1]}**`});
-      });
-    },
-    cooldown: 5,
+        const gameComponents = game(`Your current job is **${Array.from(jobs.keys())[curJob-1]}**`, false);
+        await interaction.reply(gameComponents);
+    
+        const filter = (i: MessageComponentInteraction) => i.user.id === userID;
+        const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
+    
+        collector?.on('collect', async (i: MessageComponentInteraction) => {
+          // Assuming a job ID or similar is passed as customId
+          const selectedJobId = i.customId;
+          await addJob(userID, parseInt(selectedJobId));
+          await i.update({ content: `Job selected successfully.`, components: [] });
+          collector.stop();
+        });
+    
+        collector?.on('end', async () => {
+          // Fetch the current job of the user to display
+          const userJob = await getWorker(userID);
+          const curJob = userJob ? userJob.cur : 0;
+          
+          await interaction.followUp({ content: `Your current job is **${Array.from(jobs.keys())[curJob-1]}**`});
+        });
+      },
+      cooldown: 5,
   };
   
   export default command;

@@ -1,10 +1,11 @@
 import { Collection, GuildMember } from "discord.js";
 import { connection } from "mongoose";
-import { IUser, ISex, IEdge, IItem, rarityType } from "./types";
+import { IUser, ISex, IEdge, IItem, IJob, rarityType } from "./types";
 import UserModel from "../schemas/User";
 import SexModel from "../schemas/Sex";
 import EdgeModel from "../schemas/Edge";
 import ItemModel from "../schemas/Item";
+import JobModel from "../schemas/Job";
 
 export const getUser = async (userId: string): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
@@ -168,4 +169,21 @@ export const createItem = async (id: number, name: string, emoji: string, rarity
     if (connection.readyState === 0) throw new Error("Database not connected.")
     const item = new ItemModel({ id, name, emoji, rarity, description, price, consumable, giftable });
     return item.save();
+}
+
+export const getWorker = async (userId: string): Promise<IJob | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    return JobModel.findOne({ userId }).exec();
+}
+
+export const addJob = async (userId: string, job: number): Promise<IJob | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    const updatedJob = await JobModel.findOneAndUpdate({ userId }, { $set: { cur: job } }, { new: true }).exec();
+    return updatedJob;
+};
+
+export const createWorker = async (userId: string): Promise<IJob> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.")
+    const work = new JobModel({ userId });
+    return work.save();
 }

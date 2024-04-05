@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { IJob } from "../types";
+import { IJob } from "../utility/types";
 
 const defaultDate = new Date();
 defaultDate.setHours(0, 0, 0, 0);
