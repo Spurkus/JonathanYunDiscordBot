@@ -23,7 +23,7 @@ export interface IUser extends mongoose.Document {
     userId: string;
     bank: number;
     wallet: number;
-    inventory: { itemId: number, amount: number }[];
+    inventory: Array<Array<number>>;
 }
 
 export interface IEdge extends mongoose.Document {

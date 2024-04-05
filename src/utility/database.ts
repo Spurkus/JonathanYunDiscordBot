@@ -155,7 +155,7 @@ export const getTopEdgeHighest = async (membersPromise: Promise<Collection<strin
     return sortedUsers.slice(0, limit);
 }
 
-export const getItem = async (id: string): Promise<IItem | null> => {
+export const getItem = async (id: number): Promise<IItem | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.")
     return ItemModel.findOne({ id }).exec();
 }
@@ -174,6 +174,27 @@ export const createItem = async (id: number, name: string, emoji: string, rarity
     if (connection.readyState === 0) throw new Error("Database not connected.")
     const item = new ItemModel({ id, name, emoji, rarity, description, price, consumable, giftable });
     return item.save();
+}
+
+export const addToInventory = async (userId: string, itemId: number): Promise<IUser | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    const user = await UserModel.findOne({ userId });
+    if (!user) { throw new Error("User not found."); }
+
+    // Check if the item already exists in the inventory
+    const itemIndex = user.inventory.findIndex(item => item[0] == itemId);
+    if (itemIndex != -1) {
+        user.inventory[itemIndex][1] += 1;
+    } else {
+        user.inventory.push([ itemId, 1 ]);
+    }
+    const updatedUser = await UserModel.findOneAndUpdate(
+            { userId },
+            { inventory: user.inventory }, // Ensure inventory object has itemId
+            { new: true }
+        ).exec();
+
+    return updatedUser;
 }
 
 export const getWorker = async (userId: string): Promise<IJob | null> => {
