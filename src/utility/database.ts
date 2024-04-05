@@ -176,7 +176,7 @@ export const createItem = async (id: number, name: string, emoji: string, rarity
     return item.save();
 }
 
-export const addToInventory = async (userId: string, itemId: number): Promise<IUser | null> => {
+export const addToInventory = async (userId: string, itemId: number, amount: number): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.");
     const user = await UserModel.findOne({ userId });
     if (!user) { throw new Error("User not found."); }
@@ -184,9 +184,9 @@ export const addToInventory = async (userId: string, itemId: number): Promise<IU
     // Check if the item already exists in the inventory
     const itemIndex = user.inventory.findIndex(item => item[0] == itemId);
     if (itemIndex != -1) {
-        user.inventory[itemIndex][1] += 1;
+        user.inventory[itemIndex][1] += amount;
     } else {
-        user.inventory.push([ itemId, 1 ]);
+        user.inventory.push([ itemId, amount ]);
     }
     const updatedUser = await UserModel.findOneAndUpdate(
             { userId },

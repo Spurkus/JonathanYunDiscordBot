@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
+import { SlashCommandBuilder } from "discord.js"
 import { SlashCommand } from "../utility/types";
 import { getItemName, getAllItems, getUser, createUser, removeFromWallet, addToInventory } from "../utility/database";
 import getEmoji from "../utility/emoji";
@@ -9,9 +9,14 @@ const command: SlashCommand = {
     .addStringOption(option => {
         return option
             .setName("item")
-            .setDescription("The name of the item's information/details you want to see")
+            .setDescription("The name of the item you want to buy")
             .setRequired(true)
             .setAutocomplete(true)
+    })
+    .addIntegerOption(option => {
+      return option
+        .setName("amount")
+        .setDescription("The amount of the item you want to buy") 
     })
     .setDescription("Buy an item from Yun Shops™")
     ,
@@ -48,14 +53,18 @@ const command: SlashCommand = {
         const itemEmoji = emoji[item.emoji];
         if (!itemEmoji) return interaction.reply("This item has an invalid emoji!!");
 
-        if (user.wallet < item.price) {
+        const amountSet = interaction.options.getInteger("amount");
+        let amount = amountSet ? amountSet : 1;
+        if (amount <= 0) return interaction.reply("Silly!!! You have to input positive whole numbers!!")
+
+        if (user.wallet < item.price*amount) {
             return interaction.reply(`YOU'RE POOR :rofl: You don't have enough **YunBucks** in your wallet to buy **${item.name}**`);
         }
 
-        removeFromWallet(userID, item.price);
-        addToInventory(userID, item.id);
+        removeFromWallet(userID, item.price*amount);
+        addToInventory(userID, item.id, amount);
 
-        return interaction.reply(`Successfully bought 1 ${emoji[item.emoji]} **${item.name}**`);
+        return interaction.reply(`Successfully bought ${amount} ${emoji[item.emoji]} **${item.name}** for ¥${item.price*amount}`);
     },
     cooldown: 5
 }
