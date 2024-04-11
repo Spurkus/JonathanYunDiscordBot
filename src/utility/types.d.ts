@@ -49,6 +49,7 @@ export interface IItem extends mongoose.Document {
     rarity: rarityType;
     description: string;
     price: number;
+    buyable: boolean;
     consumable: boolean;
     giftable: boolean;
 }

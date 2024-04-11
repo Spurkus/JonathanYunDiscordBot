@@ -12,9 +12,11 @@ const command: SlashCommand = {
         const emoji = await getEmoji(interaction.client);
         const items = await getAllItems();
 
-        const itemDisplay = items.map(async (item) => ({
-            name: `${emoji[item.emoji]} **${item.name}** | ¥${item.price}`,
-            value: `**[${item.rarity}]** ${item.description}`
+        const itemDisplay = items
+            .filter(item => item.buyable) // Filter out items that are not buyable
+            .map(async (item) => ({
+                name: `${emoji[item.emoji]} **${item.name}** | ¥${item.price}`,
+                value: `**[${item.rarity}]** ${item.description}`
         }));
         const embed = new EmbedBuilder()
         .setTitle(`**Yun Shops™** - The official place to buy cool items!!`)

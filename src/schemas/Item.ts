@@ -8,6 +8,7 @@ const ItemSchema = new Schema({
     rarity: { type: String },
     description: { type: String },
     price: { type: Number },
+    buyable: { type: Boolean },
     consumable: { type: Boolean },
     giftable: { type: Boolean },
 });

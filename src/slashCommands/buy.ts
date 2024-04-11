@@ -23,7 +23,9 @@ const command: SlashCommand = {
     autocomplete: async interaction => {
         const focusedValue = interaction.options.getFocused();
         const itemData = await getAllItems();
-        const choices = itemData.map((i) => ({ name: i.name, value: i.name }));
+        const choices = itemData
+            .filter(item => item.buyable) // Filter out items that are not buyable
+            .map((item) => ({ name: item.name, value: item.name }));
 
         let filtered: { name: string, value: string }[] = []
         for (let i = 0; i < choices.length; i++) {
