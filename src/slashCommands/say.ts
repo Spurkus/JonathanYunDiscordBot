@@ -1,29 +1,35 @@
-import { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, SelectMenuOptionBuilder } from "discord.js"
+import {
+    SlashCommandBuilder,
+    ModalBuilder,
+    ActionRowBuilder,
+    TextInputBuilder,
+    TextInputStyle,
+    SelectMenuOptionBuilder,
+} from "discord.js";
 import { SlashCommand } from "../utility/types";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
-    .setName("say")
-    .setDescription("What Jonathan Yun should say fr!!")
-    ,
-    execute: async interaction => {
-        const modal = new ModalBuilder()
-            .setCustomId("say")
-            .setTitle("Jonathan Yun Message:")
+        .setName("say")
+        .setDescription("What Jonathan Yun should say fr!!"),
+    execute: async (interaction) => {
+        const modal = new ModalBuilder().setCustomId("say").setTitle("Jonathan Yun Message:");
 
-		const messageInput = new TextInputBuilder()
-			.setCustomId("message")
-			.setLabel("What do you want Jonathan Yun to say?")
-			.setStyle(TextInputStyle.Paragraph);
+        const messageInput = new TextInputBuilder()
+            .setCustomId("message")
+            .setLabel("What do you want Jonathan Yun to say?")
+            .setStyle(TextInputStyle.Paragraph);
 
-		const secondActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(messageInput);
+        const secondActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(
+            messageInput
+        );
 
-		modal.addComponents(secondActionRow);
+        modal.addComponents(secondActionRow);
 
-		await interaction.showModal(modal);
+        await interaction.showModal(modal);
     },
 
-    modal: async interaction => {
+    modal: async (interaction) => {
         await interaction.deferReply({ ephemeral: true });
         const message = interaction.fields.getTextInputValue("message");
 
@@ -32,7 +38,7 @@ const command: SlashCommand = {
 
         return interaction.editReply({ content: "Message sent successfully!" });
     },
-    cooldown: 5
-}
+    cooldown: 5,
+};
 
-export default command
+export default command;

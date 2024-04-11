@@ -11,7 +11,7 @@ const event: BotEvent = {
         if (!message.member || message.member.user.bot) return;
         if (!message.guild) return;
         if (message.channel.type !== ChannelType.GuildText) return;
-        if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
+        if (mongoose.connection.readyState === 0) throw new Error("Database not connected.");
 
         const date = new Date();
         const userID = message.author.id;
@@ -29,20 +29,24 @@ const event: BotEvent = {
                 const nowDate = new Date();
                 nowDate.setHours(0, 0, 0, 0);
 
-                const difference = (nowDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+                const difference =
+                    (nowDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
                 if (difference == 1) {
                     setDate(userID);
                     addStreak(userID);
-                    message.reply(`${message.author}, first **sex** of the day!!!! ${emoji.jonathan}\nEpic sex streak of: ${sex.streak + 1}`);
+                    message.reply(
+                        `${message.author}, first **sex** of the day!!!! ${emoji.jonathan}\nEpic sex streak of: ${sex.streak + 1}`
+                    );
                 } else if (difference > 1) {
                     setDate(userID);
                     resetStreak(userID);
-                    message.reply(`${message.author}, chat this is so sad :( ${emoji.jonathan}\nYou lost the sex streaks :pensive:, now its just: 1`);
+                    message.reply(
+                        `${message.author}, chat this is so sad :( ${emoji.jonathan}\nYou lost the sex streaks :pensive:, now its just: 1`
+                    );
                 }
             }
         }
+    },
+};
 
-    }
-}
-
-export default event
+export default event;

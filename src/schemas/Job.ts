@@ -6,11 +6,11 @@ defaultDate.setHours(0, 0, 0, 0);
 
 const JobSchema = new Schema({
     userId: { type: String, required: true, unique: true },
-    date: { type: Date, default: defaultDate},
-    cur: {type: Number, default: 0},
+    date: { type: Date, default: defaultDate },
+    cur: { type: Number, default: 0 },
     streak: { type: Number, default: 1 },
 });
 
 const JobModel = model<IJob>("Workers", JobSchema);
 
-export default JobModel
+export default JobModel;

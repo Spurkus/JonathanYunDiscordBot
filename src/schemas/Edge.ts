@@ -9,4 +9,4 @@ const EdgeSchema = new Schema({
 
 const EdgeModel = model<IEdge>("Edgers", EdgeSchema);
 
-export default EdgeModel
+export default EdgeModel;

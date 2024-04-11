@@ -15,4 +15,4 @@ const ItemSchema = new Schema({
 
 const ItemModel = model<IItem>("Item", ItemSchema);
 
-export default ItemModel
+export default ItemModel;

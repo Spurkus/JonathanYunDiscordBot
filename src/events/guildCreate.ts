@@ -4,14 +4,14 @@ import { BotEvent } from "../utility/types";
 
 const event: BotEvent = {
     name: "guildCreate",
-    execute: (guild : Guild) => {
+    execute: (guild: Guild) => {
         let newGuild = new GuildModel({
             guildID: guild.id,
             options: {},
-            joinedAt: Date.now()
-        })
-        newGuild.save()
-    }
-}
+            joinedAt: Date.now(),
+        });
+        newGuild.save();
+    },
+};
 
 export default event;

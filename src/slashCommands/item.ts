@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, ColorResolvable } from "discord.js"
+import { SlashCommandBuilder, EmbedBuilder, ColorResolvable } from "discord.js";
 import { SlashCommand, rarityType } from "../utility/types";
 import { getItemName, getAllItems } from "../utility/database";
 import getEmoji from "../utility/emoji";
@@ -15,31 +15,28 @@ const rarityColours: Record<rarityType, ColorResolvable> = {
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
-    .setName("item")
-    .addStringOption(option => {
-        return option
-            .setName("name")
-            .setDescription("The name of the item's information/details you want to see")
-            .setRequired(true)
-            .setAutocomplete(true)
-    })
-    .setDescription("Check an item's information/details")
-    ,
-    autocomplete: async interaction => {
+        .setName("item")
+        .addStringOption((option) => {
+            return option
+                .setName("name")
+                .setDescription("The name of the item's information/details you want to see")
+                .setRequired(true)
+                .setAutocomplete(true);
+        })
+        .setDescription("Check an item's information/details"),
+    autocomplete: async (interaction) => {
         const focusedValue = interaction.options.getFocused();
         const itemData = await getAllItems();
         const choices = itemData.map((i) => ({ name: i.name, value: i.name }));
 
-        let filtered: { name: string, value: string }[] = []
+        let filtered: { name: string; value: string }[] = [];
         for (let i = 0; i < choices.length; i++) {
             const choice = choices[i];
             if (choice.name.includes(focusedValue)) filtered.push(choice);
         }
-        await interaction.respond(
-            filtered
-        );
+        await interaction.respond(filtered);
     },
-    execute: async interaction => {
+    execute: async (interaction) => {
         const emoji = await getEmoji(interaction.client);
         const itemName = interaction.options.getString("name");
         if (!itemName) return interaction.reply("You need to specify an item silly!");
@@ -55,16 +52,18 @@ const command: SlashCommand = {
 
         const embed = new EmbedBuilder()
             .setTitle(`${item.id}: ${item.name}`)
-            .setDescription(`**${item.rarity}**\n${item.description}\n\n**Price:** ¥${item.price}${"\u00A0\u00A0\u00A0\u00A0"}**Consumable:** ${item.consumable}${"\u00A0\u00A0\u00A0\u00A0"}**Giftable:** ${item.giftable}`)
+            .setDescription(
+                `**${item.rarity}**\n${item.description}\n\n**Price:** ¥${item.price}${"\u00A0\u00A0\u00A0\u00A0"}**Consumable:** ${item.consumable}${"\u00A0\u00A0\u00A0\u00A0"}**Giftable:** ${item.giftable}`
+            )
             .setThumbnail(`https://cdn.discordapp.com/emojis/${itemEmoji.id}.png`)
             .setColor(rarityColour)
-            .setFooter({text: "Yun Shops™"})
+            .setFooter({ text: "Yun Shops™" });
 
         await interaction.reply({
             embeds: [embed],
-        })
+        });
     },
-    cooldown: 5
-}
+    cooldown: 5,
+};
 
-export default command
+export default command;

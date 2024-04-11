@@ -1,18 +1,15 @@
-import { SlashCommandBuilder } from "discord.js"
+import { SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../utility/types";
 
 const command: SlashCommand = {
-    command: new SlashCommandBuilder()
-    .setName("porn")
-    .setDescription("O///O")
-    ,
-    execute: interaction => {
-        const pornImage = ('https://i.imgur.com/E7fHQGR.png')
+    command: new SlashCommandBuilder().setName("porn").setDescription("O///O"),
+    execute: (interaction) => {
+        const pornImage = "https://i.imgur.com/E7fHQGR.png";
         interaction.reply({
-            content: `||${pornImage}$||`
-        })
+            content: `||${pornImage}$||`,
+        });
     },
-    cooldown: 5
-}
+    cooldown: 5,
+};
 
-export default command
+export default command;

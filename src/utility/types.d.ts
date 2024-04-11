@@ -1,22 +1,30 @@
-import { SlashCommandBuilder, CommandInteraction, Collection, PermissionResolvable, Message, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js"
-import mongoose from "mongoose"
+import {
+    SlashCommandBuilder,
+    CommandInteraction,
+    Collection,
+    PermissionResolvable,
+    Message,
+    AutocompleteInteraction,
+    ChatInputCommandInteraction,
+} from "discord.js";
+import mongoose from "mongoose";
 
 export interface SlashCommand {
-    command: SlashCommandBuilder,
-    execute: (interaction : ChatInputCommandInteraction) => void,
-    autocomplete?: (interaction: AutocompleteInteraction) => void,
-    modal?: (interaction: ModalSubmitInteraction<CacheType>) => void,
-    cooldown?: number // in seconds
+    command: SlashCommandBuilder;
+    execute: (interaction: ChatInputCommandInteraction) => void;
+    autocomplete?: (interaction: AutocompleteInteraction) => void;
+    modal?: (interaction: ModalSubmitInteraction<CacheType>) => void;
+    cooldown?: number; // in seconds
 }
 
 interface GuildOptions {
-    prefix: string,
+    prefix: string;
 }
 
 export interface IGuild extends mongoose.Document {
-    guildID: string,
-    options: GuildOptions
-    joinedAt: Date
+    guildID: string;
+    options: GuildOptions;
+    joinedAt: Date;
 }
 
 export interface IUser extends mongoose.Document {
@@ -40,7 +48,14 @@ export interface ISex extends mongoose.Document {
     streak: number;
 }
 
-export type rarityType = "Special" | "Mythic" | "Legendary" | "Epic" | "Rare" | "Uncommon" | "Common";
+export type rarityType =
+    | "Special"
+    | "Mythic"
+    | "Legendary"
+    | "Epic"
+    | "Rare"
+    | "Uncommon"
+    | "Common";
 
 export interface IItem extends mongoose.Document {
     id: number;
@@ -61,30 +76,30 @@ export interface IJob extends mongoose.Document {
     streak: number;
 }
 
-export type GuildOption = keyof GuildOptions
+export type GuildOption = keyof GuildOptions;
 export interface BotEvent {
-    name: string,
-    once?: boolean | false,
-    execute: (...args?) => void
+    name: string;
+    once?: boolean | false;
+    execute: (...args) => void;
 }
 
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
-            TOKEN: string,
-            CLIENT_ID: string,
-            PREFIX: string,
-            MONGO_URI: string,
-            MONGO_DATABASE_NAME: string
+            TOKEN: string;
+            CLIENT_ID: string;
+            PREFIX: string;
+            MONGO_URI: string;
+            MONGO_DATABASE_NAME: string;
         }
     }
 }
 
 declare module "discord.js" {
     export interface Client {
-        slashCommands: Collection<string, SlashCommand>
-        commands: Collection<string, Command>,
-        cooldowns: Collection<string, number>
+        slashCommands: Collection<string, SlashCommand>;
+        commands: Collection<string, Command>;
+        cooldowns: Collection<string, number>;
     }
 }
 
