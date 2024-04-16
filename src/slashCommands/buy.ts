@@ -31,7 +31,7 @@ const command: SlashCommand = {
         const itemData = await getAllItems();
         const choices = itemData
             .filter((item) => item.buyable) // Filter out items that are not buyable
-            .map((item) => ({ name: item.name, value: item.name }));
+            .map((item) => ({ name: `${item.name} (¥${item.price})`, value: item.name }));
 
         let filtered: { name: string; value: string }[] = [];
         for (let i = 0; i < choices.length; i++) {
@@ -68,7 +68,7 @@ const command: SlashCommand = {
 
         if (user.wallet < item.price * amount) {
             return interaction.reply(
-                `YOU'RE POOR :rofl: You don't have enough **YunBucks** in your wallet to buy **${item.name}**`
+                `YOU'RE POOR :rofl: You don't have enough **YunBucks** in your wallet to buy ${amount} **${item.name}**\nYou need at least ¥${item.price * amount} **YunBucks** in your wallet!`
             );
         }
 
