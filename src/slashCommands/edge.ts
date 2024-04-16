@@ -5,7 +5,6 @@ import {
     ButtonStyle,
     ActionRowBuilder,
     MessageComponentInteraction,
-    AttachmentBuilder,
 } from "discord.js";
 import { SlashCommand } from "../utility/types";
 import {
