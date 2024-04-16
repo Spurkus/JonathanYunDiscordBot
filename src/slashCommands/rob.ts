@@ -1,6 +1,13 @@
 import { SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../utility/types";
-import { getUser, createUser, addToWallet, removeFromWallet } from "../utility/database";
+import {
+    getUser,
+    createUser,
+    addToWallet,
+    removeFromWallet,
+    removeEffect,
+} from "../utility/database";
+import getEmoji from "../utility/emoji";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
@@ -15,6 +22,7 @@ const command: SlashCommand = {
             "Robs an innocent user probably. You need at least ¥5000 YunBucks in your wallet"
         ),
     execute: async (interaction) => {
+        const emoji = await getEmoji(interaction.client);
         const userID = interaction.user.id;
         const user = await getUser(userID);
         const targetExists = interaction.options.getUser("target");
@@ -48,6 +56,15 @@ const command: SlashCommand = {
                 `${targetExists} BARELY has any **YunBucks**. Why are you trying to steal from them, just let them be lmao`
             );
 
+        const activeEffectIDs = target.active.map((effect) => effect[0]);
+        if (activeEffectIDs.includes(1)) {
+            // 1 is the effectID for Shield of Yun
+            removeEffect(targetExists.id, 1, 1);
+            removeFromWallet(userID, 1000);
+            return interaction.reply(
+                `You have been cock BLOCKED!!!!!!! **Jonathan Yun** himself has take ¥1000 from you.\n${targetExists} is safe because they have ${emoji.shieldyun} **Shield of Yun** activated :3`
+            );
+        }
         const randomChance = Math.floor(Math.random() * 100);
         if (randomChance >= 40) {
             const stolen = Math.floor(Math.random() * target.wallet);

@@ -8,8 +8,7 @@ import { SlashCommand } from "./utility/types";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { join } from "path";
-import { addFieldToUsers } from "./scripts/script";
-import { createItem } from "./utility/database";
+import { addFieldToUsers, createItem, createEffect } from "./utility/database";
 config();
 
 client.slashCommands = new Collection<string, SlashCommand>();
@@ -22,6 +21,7 @@ readdirSync(handlersDir).forEach((handler) => {
 });
 
 // addFieldToUsers("active", []);
-// createItem(2, "Flower of Yun", "floweryun", "Common", "A cute flower :3", 500, false, true);
+// createItem(2, "Flower of Yun", "floweryun", "Common", "A cute flower :3", 500, false, true, true);
+// createEffect(1, "Shield of Yun", "shieldyun", "**blocks** robs if someone tries to rob you <3", 10);
 
 client.login(process.env.TOKEN);

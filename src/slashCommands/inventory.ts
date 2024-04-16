@@ -29,9 +29,6 @@ const command: SlashCommand = {
 
         const inventory = user.inventory;
 
-        if (!inventory)
-            return interaction.reply(`${interaction.member} has an empty inventory :rofl:`);
-
         const itemDisplay = inventory.map(async (item) => {
             const fetchedItem = await getItem(item[0]);
             if (!fetchedItem) throw new Error(`Item with ID ${item[0]} not found.`);

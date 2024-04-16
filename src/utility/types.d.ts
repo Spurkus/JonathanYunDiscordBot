@@ -69,6 +69,14 @@ export interface IItem extends mongoose.Document {
     giftable: boolean;
 }
 
+export interface IEffect extends mongoose.Document {
+    id: number;
+    name: string;
+    emoji: string;
+    description: string;
+    uses: number;
+}
+
 export interface IJob extends mongoose.Document {
     userId: string;
     date: Date;

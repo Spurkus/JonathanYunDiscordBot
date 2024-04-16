@@ -1,11 +1,23 @@
 import { Collection, GuildMember } from "discord.js";
 import { connection } from "mongoose";
-import { IUser, ISex, IEdge, IItem, IJob, rarityType } from "./types";
+import { IUser, ISex, IEdge, IItem, IEffect, IJob, rarityType } from "./types";
 import UserModel from "../schemas/User";
 import SexModel from "../schemas/Sex";
 import EdgeModel from "../schemas/Edge";
 import ItemModel from "../schemas/Item";
+import EffectModel from "../schemas/Effect";
 import JobModel from "../schemas/Job";
+
+export const addFieldToUsers = async (name: string, defaultValue: any) => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    try {
+        // Update all documents in the user collection to add the wordSaid field
+        await UserModel.updateMany({}, { $set: { [name]: defaultValue } });
+        console.log("Field added to all users successfully.");
+    } catch (error) {
+        console.error("Error adding field to users:", error);
+    }
+};
 
 export const getUser = async (userId: string): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.");
@@ -253,6 +265,7 @@ export const addToInventory = async (
 
     return updatedUser;
 };
+
 export const removeFromInventory = async (
     userId: string,
     itemId: number,
@@ -277,6 +290,85 @@ export const removeFromInventory = async (
     const updatedUser = await UserModel.findOneAndUpdate(
         { userId },
         { inventory: user.inventory },
+        { new: true }
+    ).exec();
+    return updatedUser;
+};
+
+export const createEffect = async (
+    id: number,
+    name: string,
+    emoji: string,
+    description: string,
+    uses: number
+): Promise<IEffect> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    const effect = new EffectModel({
+        id,
+        name,
+        emoji,
+        description,
+        uses,
+    });
+    return effect.save();
+};
+
+export const getEffect = async (id: number): Promise<IEffect | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    return EffectModel.findOne({ id }).exec();
+};
+
+export const addEffect = async (
+    userId: string,
+    effectId: number,
+    amount: number
+): Promise<IUser | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    const user = await UserModel.findOne({ userId });
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    // Check if the item already exists in the inventory
+    const effectIndex = user.active.findIndex((effect) => effect[0] == effectId);
+    if (effectIndex != -1) {
+        user.active[effectIndex][1] += amount;
+    } else {
+        user.active.push([effectId, amount]);
+    }
+    const updatedUser = await UserModel.findOneAndUpdate(
+        { userId },
+        { active: user.active }, // Ensure active object has effectId
+        { new: true }
+    ).exec();
+
+    return updatedUser;
+};
+
+export const removeEffect = async (
+    userId: string,
+    effectId: number,
+    amount: number
+): Promise<IUser | null> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    const user = await UserModel.findOne({ userId });
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    // Check if the item exists in the inventory
+    const effectIndex = user.active.findIndex((effect) => effect[0] == effectId);
+    if (effectIndex != -1) {
+        user.active[effectIndex][1] -= amount;
+        if (user.active[effectIndex][1] <= 0) {
+            user.active.splice(effectIndex, 1);
+        }
+    } else {
+        throw new Error("Effect not found in active.");
+    }
+    const updatedUser = await UserModel.findOneAndUpdate(
+        { userId },
+        { active: user.active },
         { new: true }
     ).exec();
     return updatedUser;
