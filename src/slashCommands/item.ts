@@ -50,12 +50,16 @@ const command: SlashCommand = {
         const rarityColour = rarityColours[item.rarity];
         if (!rarityColour) return interaction.reply("The rarity is invalid");
 
+        const thumbnailUrl = itemEmoji.id
+            ? itemEmoji.url
+            : `https://emojicdn.elk.sh/${item.emoji}?style=twitter`;
+
         const embed = new EmbedBuilder()
             .setTitle(`${item.id}: ${item.name}`)
             .setDescription(
                 `**${item.rarity}**\n${item.description}\n\n**Price:** ¥${item.price}${"\u00A0\u00A0\u00A0\u00A0"}**Consumable:** ${item.consumable}${"\u00A0\u00A0\u00A0\u00A0"}**Giftable:** ${item.giftable}`
             )
-            .setThumbnail(`https://cdn.discordapp.com/emojis/${itemEmoji.id}.png`)
+            .setThumbnail(thumbnailUrl)
             .setColor(rarityColour)
             .setFooter({ text: "Yun Shops™" });
 

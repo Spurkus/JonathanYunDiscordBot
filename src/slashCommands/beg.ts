@@ -1,6 +1,12 @@
 import { SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../utility/types";
-import { getUser, createUser, removeFromWallet, addToWallet } from "../utility/database";
+import {
+    getUser,
+    createUser,
+    removeFromWallet,
+    addToWallet,
+    removeEffect,
+} from "../utility/database";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder().setName("beg").setDescription("Beg for a few YunBucks"),
@@ -16,12 +22,22 @@ const command: SlashCommand = {
             );
         }
 
-        const randomChance = Math.floor(Math.random() * 100); // Random :3
+        const effectIDs = user.active.map((effect) => effect[0]);
+        let messageActive: String = "";
+
+        const luckActive = effectIDs.includes(3); // 3 is Luck effect
+        const luckBonus = luckActive ? 1.08 : 1;
+        if (luckActive) {
+            removeEffect(userID, 3, 1);
+            messageActive = ":four_leaf_clover: Luck of 8% bonus has been activated\n";
+        }
+
+        const randomChance = Math.floor(Math.random() * 100) * luckBonus; // Random :3
 
         // Receives Nothing
         if (randomChance <= 8) {
             return interaction.reply(
-                `${interaction.member}, you begged and nobody likes you so received nothing LMAOO. ¥0 **YunBucks** was added`
+                `${messageActive}${interaction.member}, you begged and nobody likes you so received nothing LMAOO. ¥0 **YunBucks** was added`
             );
         }
 
@@ -30,15 +46,15 @@ const command: SlashCommand = {
             var randomNumber = Math.floor(Math.random() * 200) + 1;
             removeFromWallet(userID, randomNumber);
             return interaction.reply(
-                `${interaction.member}, you begged and someone hates you so they decided to rob you L. ¥${randomNumber} **YunBucks** was taken from your wallet`
+                `${messageActive}${interaction.member}, you begged and someone hates you so they decided to rob you L. ¥${randomNumber} **YunBucks** was taken from your wallet`
             );
         }
 
         // Begging worked!
-        var randomNumber = Math.floor(Math.random() * 500) + 1;
+        var randomNumber = Math.floor(Math.random() * 500 * luckBonus) + 1;
         addToWallet(userID, randomNumber);
         return interaction.reply(
-            `${interaction.member}, you begged and received ¥${randomNumber} **YunBucks**.`
+            `${messageActive}${interaction.member}, you begged and received ¥${randomNumber} **YunBucks**.`
         );
     },
     cooldown: 10,
