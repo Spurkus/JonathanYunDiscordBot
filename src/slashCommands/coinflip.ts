@@ -58,14 +58,26 @@ const command: SlashCommand = {
                 );
         }
 
-        const coinBonusActive = user.active.map((effect) => effect[0]).includes(0);
-        if (coinBonusActive) removeEffect(userID, 0, 1);
-        const bonus = coinBonusActive ? 0.19 : 0;
-        const messageActive = coinBonusActive
-            ? `${emoji["69coin"]} **The Coin of 69** has been activated\n`
-            : "";
+        const effectIDs = user.active.map((effect) => effect[0]);
+        let messageActive: String = "";
 
-        if (randomChance > 0.5 + bonus) {
+        const luckActive = effectIDs.includes(3); // 3 is Luck effect
+        const luckBonus = luckActive ? 1.08 : 1;
+        if (luckActive) {
+            removeEffect(userID, 3, 1);
+            messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated";
+        }
+
+        const coinBonusActive = effectIDs.includes(0); // 0 is The Coin of 69 Bonus
+        const coinBonus = coinBonusActive ? 0.19 : 0;
+        if (coinBonusActive) {
+            removeEffect(userID, 0, 1);
+            messageActive += `${emoji["69coin"]} **The Coin of 69** has been activated`;
+        }
+
+        if (messageActive) messageActive += "\n";
+
+        if (randomChance > (0.5 + coinBonus) * luckBonus) {
             removeFromWallet(userID, gamble);
             return interaction.reply(
                 `${messageActive}LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${gamble} **YunBucks** was taken from your wallet`

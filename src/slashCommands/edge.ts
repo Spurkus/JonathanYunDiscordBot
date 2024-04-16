@@ -16,14 +16,16 @@ import {
     setEdgeHighest,
     getEdger,
     createEdger,
+    removeEffect,
 } from "../utility/database";
 import getEmoji from "../utility/emoji";
 
-const game = (gamble: number, streak: number, disable: boolean) => {
+const game = (gamble: number, streak: number, disable: boolean, luckActive: boolean) => {
+    const message = luckActive ? ":four_leaf_clover: Luck of 8% bonus has been activated\n\n" : "";
     const embed = new EmbedBuilder()
         .setTitle("**Edging Streak Game!!!**")
         .setDescription(
-            `Don't edge too hard or you'll bust :face_with_hand_over_mouth:\n**💰 Gamble:** ${gamble}\n**🔥 Streak:** ${streak}`
+            `${message} Don't edge too hard or you'll bust :face_with_hand_over_mouth:\n**💰 Gamble:** ${gamble}\n**🔥 Streak:** ${streak}`
         )
         .setColor("White");
 
@@ -46,18 +48,18 @@ const game = (gamble: number, streak: number, disable: boolean) => {
     return { embed, row };
 };
 
-const bust = (streak: number): boolean => {
+const bust = (streak: number, bonus: number): boolean => {
     const probability = Math.random();
     let sum = 0;
     for (let k = 1; k <= streak; k++) {
         sum += (1 / 15) * Math.pow(13 / 20, k - 1);
     }
 
-    return probability < sum;
+    return probability * bonus < sum;
 };
 
 const winAmount = (gamble: number, streak: number): number => {
-    return Math.round(gamble * Math.pow(1.25, streak));
+    return Math.round(gamble * Math.pow(1.15, streak));
 };
 
 const command: SlashCommand = {
@@ -120,7 +122,10 @@ const command: SlashCommand = {
                 );
         }
 
-        const { embed, row } = game(gamble, streak, false);
+        const effectIDs = user.active.map((effect) => effect[0]);
+        const luckActive = effectIDs.includes(3); // 3 is Luck effect
+
+        const { embed, row } = game(gamble, streak, false, luckActive);
 
         const response = await interaction.reply({
             embeds: [embed],
@@ -138,12 +143,15 @@ const command: SlashCommand = {
 
         collector.on("collect", async (choice: MessageComponentInteraction) => {
             if (choice.customId == "cashout") {
+                const effectIDs = user.active.map((effect) => effect[0]);
+                const luckActive = effectIDs.includes(3); // 3 is Luck effect
+
                 const money = winAmount(gamble, streak);
                 addToWallet(userID, money - gamble);
                 interaction.channel?.send(
                     `Nice! ${interaction.member} edged **${streak}** times, pretty epic! You get an extra ¥${money - gamble} **YunBucks**`
                 );
-                const { embed, row } = await game(money, streak, true);
+                const { embed, row } = await game(money, streak, true, luckActive);
                 await choice.update({
                     embeds: [embed],
                     components: [row],
@@ -152,7 +160,13 @@ const command: SlashCommand = {
                 return;
             }
 
-            if (bust(streak + 1)) {
+            const effectIDs = user.active.map((effect) => effect[0]);
+
+            const luckActive = effectIDs.includes(3); // 3 is Luck effect
+            const luckBonus = luckActive ? 1.08 : 1;
+            if (luckActive) removeEffect(userID, 3, 1);
+
+            if (bust(streak + 1, luckBonus)) {
                 addEdgeTotal(userID);
                 setEdgeHighest(userID, Math.max(edger.highest, streak));
                 removeFromWallet(userID, gamble);
@@ -164,7 +178,7 @@ const command: SlashCommand = {
                     embeds: [cum],
                 });
                 const money = winAmount(gamble, streak);
-                const { embed, row } = await game(money, streak, true);
+                const { embed, row } = await game(money, streak, true, luckActive);
                 await choice.update({
                     embeds: [embed],
                     components: [row],
@@ -176,7 +190,7 @@ const command: SlashCommand = {
                 addEdgeTotal(userID);
                 setEdgeHighest(userID, Math.max(edger.highest, streak));
                 const money = winAmount(gamble, streak);
-                const { embed, row } = await game(money, streak, false);
+                const { embed, row } = await game(money, streak, false, luckActive);
 
                 await choice.update({
                     embeds: [embed],
