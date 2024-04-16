@@ -65,14 +65,14 @@ const command: SlashCommand = {
         const luckBonus = luckActive ? 1.08 : 1;
         if (luckActive) {
             removeEffect(userID, 3, 1);
-            messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated";
+            messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
         }
 
         const coinBonusActive = effectIDs.includes(0); // 0 is The Coin of 69 Bonus
         const coinBonus = coinBonusActive ? 0.19 : 0;
         if (coinBonusActive) {
             removeEffect(userID, 0, 1);
-            messageActive += `${emoji["69coin"]} **The Coin of 69** has been activated`;
+            messageActive += `${emoji["69coin"]} **The Coin of 69** has been activated\n`;
         }
 
         if (messageActive) messageActive += "\n";
