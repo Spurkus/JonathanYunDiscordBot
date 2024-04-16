@@ -21,7 +21,17 @@ readdirSync(handlersDir).forEach((handler) => {
 });
 
 // addFieldToUsers("active", []);
-// createItem(6, "Old Boot", "🥾", "Common", "Ewwwww Stinky Old Boot Feet", 10, false, false, true);
+// createItem(
+//     7,
+//     "JonaCondom",
+//     "jonacondom",
+//     "Legendary",
+//     "The Legendary JonaCondom was once used by **Jonathan Yun** himself. But darkness befell as he put the JonaCondom on and gave **Jennifer Yun** a UTI. Now only the most worthy can have the JonaCondom.",
+//     10000000000000000000000000,
+//     false,
+//     false,
+//     true
+// );
 // createEffect(3, "Luckiness :3", "luckpotion", "Boosts all **luck events** by **8%**", 10);
 
 client.login(process.env.TOKEN);
