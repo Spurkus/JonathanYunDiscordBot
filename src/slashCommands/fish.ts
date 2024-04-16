@@ -54,7 +54,7 @@ const command: SlashCommand = {
         }
 
         // Fishing Success!!
-        const fishAmount = Math.floor(Math.random() * 5) * luckBonus; // Random :3
+        const fishAmount = Math.floor(Math.random() * 5 * luckBonus); // Random :3
         addToInventory(userID, 5, fishAmount);
         return interaction.reply(
             `${messageActive}${interaction.member}, you successfully fished up ${fishAmount} 🐟 **Fish**!!`
