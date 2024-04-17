@@ -59,7 +59,11 @@ const bust = (streak: number, bonus: number): boolean => {
 };
 
 const winAmount = (gamble: number, streak: number): number => {
-    return Math.round(gamble * Math.pow(1.15, streak));
+    if (streak <= 5) {
+        return Math.round(gamble * Math.pow(1.1, streak / 2));
+    } else {
+        return Math.round(gamble * Math.pow(1.65, streak - 5));
+    }
 };
 
 const command: SlashCommand = {
