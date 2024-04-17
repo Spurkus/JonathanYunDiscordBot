@@ -9,7 +9,7 @@ const getEmoji = async (client: Client) => {
     const emojis: EmojiMap = new Proxy(
         Object.fromEntries(guild.emojis.cache.map((emoji) => [emoji.name, emoji])),
         {
-            get: function (target, name) {
+            get: (target, name) => {
                 return target[name] || name; // Uses default emoji tag if not in guild
             },
         }

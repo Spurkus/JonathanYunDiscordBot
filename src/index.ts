@@ -22,12 +22,12 @@ readdirSync(handlersDir).forEach((handler) => {
 
 // addFieldToUsers("active", []);
 // createItem(
-//     7,
-//     "JonaCondom",
-//     "jonacondom",
+//     21,
+//     "Jonathan Yun's Rod (for fishing)",
+//     "jonathanfishingrod",
 //     "Legendary",
-//     "The Legendary JonaCondom was once used by **Jonathan Yun** himself. But darkness befell as he put the JonaCondom on and gave **Jennifer Yun** a UTI. Now only the most worthy can have the JonaCondom.",
-//     10000000000000000000000000,
+//     "A rare fishing rode from BTD, also includes the monkey... (do not bring up the bloons incident)",
+//     69000,
 //     false,
 //     false,
 //     true

@@ -66,6 +66,10 @@ const command: SlashCommand = {
         if (amount <= 0)
             return interaction.reply("Silly!!! You have to input positive whole numbers!!");
 
+        if (!item.buyable) {
+            return interaction.reply(`You cannot buy this item stupid!!!!!!!!!!!!!!!!!!!!`);
+        }
+
         if (user.wallet < item.price * amount) {
             return interaction.reply(
                 `YOU'RE POOR :rofl: You don't have enough **YunBucks** in your wallet to buy ${amount} **${item.name}**\nYou need at least ¥${item.price * amount} **YunBucks** in your wallet!`
