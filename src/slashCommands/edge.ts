@@ -165,11 +165,7 @@ const command: SlashCommand = {
             const luckActive = effectIDs.includes(3); // 3 is Luck effect
             const luckBonus = luckActive ? 1.08 : 1;
             if (luckActive) {
-                try {
-                    removeEffect(userID, 3, 1);
-                } catch (error) {
-                    console.log(error);
-                }
+                removeEffect(userID, 3, 1);
             }
 
             if (bust(streak + 1, luckBonus)) {

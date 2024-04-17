@@ -363,8 +363,6 @@ export const removeEffect = async (
         if (user.active[effectIndex][1] <= 0) {
             user.active.splice(effectIndex, 1);
         }
-    } else {
-        throw new Error("Effect not found in active.");
     }
     const updatedUser = await UserModel.findOneAndUpdate(
         { userId },
