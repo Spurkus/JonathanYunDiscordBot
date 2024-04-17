@@ -62,7 +62,7 @@ const winAmount = (gamble: number, streak: number): number => {
     if (streak <= 5) {
         return Math.round(gamble * Math.pow(1.1, streak / 2));
     } else {
-        return Math.round(gamble * Math.pow(1.45, streak - 5));
+        return Math.round(gamble * Math.pow(1.25, streak - 5));
     }
 };
 
