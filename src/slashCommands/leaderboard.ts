@@ -17,7 +17,7 @@ import {
     getTopEdge,
     getTopEdgeHighest,
 } from "../utility/database";
-import { capitalisedName } from "../utility/functions";
+import { capitalisedName, addCommas } from "../utility/functions";
 
 type Position = Promise<{ name: string; value: string }>[];
 interface DisplayResult {
@@ -150,7 +150,7 @@ const command: SlashCommand = {
 
             const promises = topUsers.map(async (user, index) => ({
                 name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
-                value: `Net Worth: ¥${calculateNetWorth(user)}`,
+                value: `Net Worth: ¥${addCommas(calculateNetWorth(user))}`,
             }));
 
             const embed = new EmbedBuilder();

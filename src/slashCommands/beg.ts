@@ -7,6 +7,7 @@ import {
     addToWallet,
     removeEffect,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder().setName("beg").setDescription("Beg for a few YunBucks"),
@@ -54,7 +55,7 @@ const command: SlashCommand = {
         var randomNumber = Math.floor(Math.random() * 500 * luckBonus) + 1;
         addToWallet(userID, randomNumber);
         return interaction.reply(
-            `${messageActive}${interaction.member}, you begged and received ¥${randomNumber} **YunBucks**.`
+            `${messageActive}${interaction.member}, you begged and received ¥${addCommas(randomNumber)} **YunBucks**.`
         );
     },
     cooldown: 10,

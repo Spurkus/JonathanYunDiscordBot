@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import { SlashCommand } from "../utility/types";
 import { getUser, createUser } from "../utility/database";
-import { capitalisedName } from "../utility/functions";
+import { capitalisedName, addCommas } from "../utility/functions";
 
 const formatName = (name: string): string => {
     if (name[name.length - 1] == "s") {
@@ -46,7 +46,7 @@ const command: SlashCommand = {
             .setTitle(
                 `**${formatName(targetUser ? targetUser.username : interaction.user.username)}**`
             )
-            .setDescription(`**Wallet:** ¥${wallet}\n**Bank:** ¥${bank}`)
+            .setDescription(`**Wallet:** ¥${addCommas(wallet)}\n**Bank:** ¥${addCommas(bank)}`)
             .setColor("Green")
             .setThumbnail(
                 targetUser ? targetUser.displayAvatarURL() : interaction.user.displayAvatarURL()

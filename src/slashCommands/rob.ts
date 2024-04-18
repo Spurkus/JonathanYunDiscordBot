@@ -7,6 +7,7 @@ import {
     removeFromWallet,
     removeEffect,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const command: SlashCommand = {
@@ -71,7 +72,7 @@ const command: SlashCommand = {
             addToWallet(userID, stolen);
             removeFromWallet(targetExists.id, stolen);
             return interaction.reply(
-                `You stole ¥${stolen} **YunBucks** from ${targetExists}, you sneaky little baka >.<`
+                `You stole ¥${addCommas(stolen)} **YunBucks** from ${targetExists}, you sneaky little baka >.<`
             );
         } else {
             removeFromWallet(userID, 5000);

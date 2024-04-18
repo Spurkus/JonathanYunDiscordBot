@@ -10,6 +10,7 @@ import {
     removeFromInventory,
     addToInventory,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const command: SlashCommand = {
@@ -99,7 +100,9 @@ const command: SlashCommand = {
 
             removeFromWallet(userID, amountNumber);
             addToWallet(targetExists.id, amountNumber);
-            return interaction.reply(`You gave ${targetExists}, ¥${amountNumber} **YunBucks**!`);
+            return interaction.reply(
+                `You gave ${targetExists}, ¥${addCommas(amountNumber)} **YunBucks**!`
+            );
         } else {
             // Giving Items!!
             const item = await getItemName(itemName);

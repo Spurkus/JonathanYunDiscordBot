@@ -18,6 +18,7 @@ import {
     createEdger,
     removeEffect,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const game = (gamble: number, streak: number, disable: boolean, luckActive: boolean) => {
@@ -25,7 +26,7 @@ const game = (gamble: number, streak: number, disable: boolean, luckActive: bool
     const embed = new EmbedBuilder()
         .setTitle("**Edging Streak Game!!!**")
         .setDescription(
-            `${message} Don't edge too hard or you'll bust :face_with_hand_over_mouth:\n**💰 Gamble:** ${gamble}\n**🔥 Streak:** ${streak}`
+            `${message} Don't edge too hard or you'll bust :face_with_hand_over_mouth:\n**💰 Gamble:** ¥${addCommas(gamble)}\n**🔥 Streak:** ${streak}`
         )
         .setColor("White");
 
@@ -153,7 +154,7 @@ const command: SlashCommand = {
                 const money = winAmount(gamble, streak);
                 addToWallet(userID, money - gamble);
                 interaction.channel?.send(
-                    `Nice! ${interaction.member} edged **${streak}** times, pretty epic! You get an extra ¥${money - gamble} **YunBucks**`
+                    `Nice! ${interaction.member} edged **${streak}** times, pretty epic! You get an extra ¥${addCommas(money - gamble)} **YunBucks**`
                 );
                 const { embed, row } = await game(money, streak, true, luckActive);
                 await choice.update({

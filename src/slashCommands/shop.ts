@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import { SlashCommand } from "../utility/types";
 import { getAllItems } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const command: SlashCommand = {
@@ -14,7 +15,7 @@ const command: SlashCommand = {
         const itemDisplay = items
             .filter((item) => item.buyable) // Filter out items that are not buyable
             .map(async (item) => ({
-                name: `${emoji[item.emoji]} **${item.name}** | ¥${item.price}`,
+                name: `${emoji[item.emoji]} **${item.name}** | ¥${addCommas(item.price)}`,
                 value: `**[${item.rarity}]** ${item.description}`,
             }));
         const embed = new EmbedBuilder()

@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../utility/types";
 import { getUser, createUser, removeFromBank, addToWallet } from "../utility/database";
+import { addCommas } from "../utility/functions";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
@@ -31,7 +32,9 @@ const command: SlashCommand = {
             const all = user.bank;
             addToWallet(userID, all);
             removeFromBank(userID, all);
-            return interaction.reply(`You withdrew ¥${all} **YunBucks** into your wallet`);
+            return interaction.reply(
+                `You withdrew ¥${addCommas(all)} **YunBucks** into your wallet`
+            );
         }
 
         if (!/^\d+$/.test(amount))
@@ -53,7 +56,9 @@ const command: SlashCommand = {
 
         removeFromBank(userID, amountNumber);
         addToWallet(userID, amountNumber);
-        return interaction.reply(`You withdrew ¥${amountNumber} **YunBucks** into your wallet`);
+        return interaction.reply(
+            `You withdrew ¥${addCommas(amountNumber)} **YunBucks** into your wallet`
+        );
     },
     cooldown: 10,
 };

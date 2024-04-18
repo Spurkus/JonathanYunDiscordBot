@@ -12,6 +12,7 @@ import {
     createUser,
     addToWallet,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const event: BotEvent = {
@@ -53,7 +54,7 @@ const event: BotEvent = {
 
                     addToWallet(userID, amount);
                     message.reply(
-                        `${message.author}, first **sex** of the day!!!! ${emoji.jonathan}\nEpic sex streak of: ${sex.streak + 1}\n**Jonathan Yun** has given you an extra ¥${amount} **YunBucks** in your wallet <3`
+                        `${message.author}, first **sex** of the day!!!! ${emoji.jonathan}\nEpic sex streak of: ${sex.streak + 1}\n**Jonathan Yun** has given you an extra ¥${addCommas(amount)} **YunBucks** in your wallet <3`
                     );
                 } else if (difference > 1) {
                     setDate(userID);

@@ -8,6 +8,7 @@ import {
     removeFromWallet,
     addToInventory,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const command: SlashCommand = {
@@ -31,7 +32,10 @@ const command: SlashCommand = {
         const itemData = await getAllItems();
         const choices = itemData
             .filter((item) => item.buyable) // Filter out items that are not buyable
-            .map((item) => ({ name: `${item.name} (¥${item.price})`, value: item.name }));
+            .map((item) => ({
+                name: `${item.name} (¥${addCommas(item.price)})`,
+                value: item.name,
+            }));
 
         let filtered: { name: string; value: string }[] = [];
         for (let i = 0; i < choices.length; i++) {
@@ -72,7 +76,7 @@ const command: SlashCommand = {
 
         if (user.wallet < item.price * amount) {
             return interaction.reply(
-                `YOU'RE POOR :rofl: You don't have enough **YunBucks** in your wallet to buy ${amount} **${item.name}**\nYou need at least ¥${item.price * amount} **YunBucks** in your wallet!`
+                `YOU'RE POOR :rofl: You don't have enough **YunBucks** in your wallet to buy ${addCommas(amount)} **${item.name}**\nYou need at least ¥${addCommas(item.price * amount)} **YunBucks** in your wallet!`
             );
         }
 
@@ -80,7 +84,7 @@ const command: SlashCommand = {
         addToInventory(userID, item.id, amount);
 
         return interaction.reply(
-            `Successfully bought ${amount} ${emoji[item.emoji]} **${item.name}** for ¥${item.price * amount}`
+            `Successfully bought ${amount} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(item.price * amount)}`
         );
     },
     cooldown: 5,

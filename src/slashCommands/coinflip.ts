@@ -7,6 +7,7 @@ import {
     addToWallet,
     removeEffect,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const command: SlashCommand = {
@@ -80,13 +81,13 @@ const command: SlashCommand = {
         if (randomChance > (0.5 + coinBonus) * luckBonus) {
             removeFromWallet(userID, gamble);
             return interaction.reply(
-                `${messageActive}LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${gamble} **YunBucks** was taken from your wallet`
+                `${messageActive}LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${addCommas(gamble)} **YunBucks** was taken from your wallet`
             );
         }
 
         addToWallet(userID, gamble);
         return interaction.reply(
-            `${messageActive}AYYY YOU WON!!! ¥${gamble} **YunBucks** was added into your wallet`
+            `${messageActive}AYYY YOU WON!!! ¥${addCommas(gamble)} **YunBucks** was added into your wallet`
         );
     },
     cooldown: 10,

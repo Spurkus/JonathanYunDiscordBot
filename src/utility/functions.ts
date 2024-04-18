@@ -79,3 +79,7 @@ export const setGuildOption = async (guild: Guild, option: GuildOption, value: a
 export const capitalisedName = (name: string): string => {
     return name.charAt(0).toUpperCase() + name.slice(1);
 };
+
+export const addCommas = (number: number): string => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

@@ -8,6 +8,7 @@ import {
     addToWallet,
     removeFromInventory,
 } from "../utility/database";
+import { addCommas } from "../utility/functions";
 import getEmoji from "../utility/emoji";
 
 const command: SlashCommand = {
@@ -99,7 +100,7 @@ const command: SlashCommand = {
         removeFromInventory(userID, item.id, amountNumber);
 
         return interaction.reply(
-            `Successfully sold ${amountNumber} ${emoji[item.emoji]} **${item.name}** for ¥${totalPrice}`
+            `Successfully sold ${amountNumber} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(totalPrice)}`
         );
     },
     cooldown: 5,

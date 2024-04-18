@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import { SlashCommand } from "../utility/types";
 import { addJob, getWorker, createWorker, getUser, createUser } from "../utility/database";
+import { addCommas } from "../utility/functions";
 
 const jobs = new Map<string, number>([
     ["Jonathan Yun's Discord Kitten <:Sus_anime_catgirl_cute:1225436718459519117>", 5000],
@@ -30,7 +31,11 @@ const game = (thingy: string, disable: boolean) => {
     let i = 1;
     const row = new ActionRowBuilder<ButtonBuilder>();
     jobs.forEach((value, key) => {
-        embed.addFields({ name: `**${i}** . ${key}`, value: `Salary: ¥${value}`, inline: false });
+        embed.addFields({
+            name: `**${i}** . ${key}`,
+            value: `Salary: ¥${addCommas(value)}`,
+            inline: false,
+        });
         const button = new ButtonBuilder()
             .setCustomId(`${i}`)
             .setLabel(`${i}`)
