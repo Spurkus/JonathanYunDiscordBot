@@ -329,7 +329,7 @@ export const addEffect = async (
         throw new Error("User not found.");
     }
 
-    // Check if the item already exists in the inventory
+    // Check if the effect exists in active
     const effectIndex = user.active.findIndex((effect) => effect[0] == effectId);
     if (effectIndex != -1) {
         user.active[effectIndex][1] += amount;
@@ -356,12 +356,13 @@ export const removeEffect = async (
         throw new Error("User not found.");
     }
 
-    // Check if the item exists in the inventory
+    // Check if the effect exists in active
     const effectIndex = user.active.findIndex((effect) => effect[0] == effectId);
     if (effectIndex != -1) {
-        user.active[effectIndex][1] -= amount;
-        if (user.active[effectIndex][1] <= 0) {
+        if (user.active[effectIndex][1] - amount <= 0) {
             user.active.splice(effectIndex, 1);
+        } else {
+            user.active[effectIndex][1] -= amount;
         }
     }
     const updatedUser = await UserModel.findOneAndUpdate(

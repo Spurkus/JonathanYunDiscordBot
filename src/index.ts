@@ -26,7 +26,7 @@ readdirSync(handlersDir).forEach((handler) => {
 //     "Jonathan Yun's Rod (for fishing)",
 //     "jonathanfishingrod",
 //     "Legendary",
-//     "A rare fishing rode from BTD, also includes the monkey... (do not bring up the bloons incident)",
+//     "big rod for big man Jonathan Yun (used for fishing 😼). You can only get this item from fishing!!",
 //     69000,
 //     false,
 //     false,

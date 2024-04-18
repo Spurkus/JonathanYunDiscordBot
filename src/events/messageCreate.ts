@@ -1,7 +1,17 @@
 import { ChannelType, Message } from "discord.js";
 import { BotEvent } from "../utility/types";
 import mongoose from "mongoose";
-import { addStreak, addTotal, createSex, getSex, resetStreak, setDate } from "../utility/database";
+import {
+    addStreak,
+    addTotal,
+    createSex,
+    getSex,
+    resetStreak,
+    setDate,
+    getUser,
+    createUser,
+    addToWallet,
+} from "../utility/database";
 import getEmoji from "../utility/emoji";
 
 const event: BotEvent = {
@@ -34,8 +44,16 @@ const event: BotEvent = {
                 if (difference == 1) {
                     setDate(userID);
                     addStreak(userID);
+                    const amount = (sex.streak + 1) * 100;
+
+                    let user = await getUser(userID);
+                    if (!user) {
+                        user = await createUser(userID);
+                    }
+
+                    addToWallet(userID, amount);
                     message.reply(
-                        `${message.author}, first **sex** of the day!!!! ${emoji.jonathan}\nEpic sex streak of: ${sex.streak + 1}`
+                        `${message.author}, first **sex** of the day!!!! ${emoji.jonathan}\nEpic sex streak of: ${sex.streak + 1}\n**Jonathan Yun** has given you an extra ¥${amount} **YunBucks** in your wallet <3`
                     );
                 } else if (difference > 1) {
                     setDate(userID);
