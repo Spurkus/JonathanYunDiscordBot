@@ -84,7 +84,7 @@ const command: SlashCommand = {
         addToInventory(userID, item.id, amount);
 
         return interaction.reply(
-            `Successfully bought ${amount} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(item.price * amount)}`
+            `Successfully bought ${addCommas(amount)} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(item.price * amount)}`
         );
     },
     cooldown: 5,

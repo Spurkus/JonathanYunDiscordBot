@@ -100,7 +100,7 @@ const command: SlashCommand = {
         removeFromInventory(userID, item.id, amountNumber);
 
         return interaction.reply(
-            `Successfully sold ${amountNumber} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(totalPrice)}`
+            `Successfully sold ${addCommas(amountNumber)} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(totalPrice)}`
         );
     },
     cooldown: 5,
