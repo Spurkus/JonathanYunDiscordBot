@@ -70,8 +70,14 @@ export const getTopUsers = async (
     const allUsers = await getAllUsers();
     const serverUserIds: Set<string> = new Set(members.map((member) => member.id));
     const serverUsers = allUsers.filter((user) => serverUserIds.has(user.userId));
-    const sortedUsers = serverUsers.sort((a, b) => calculateNetWorth(b) - calculateNetWorth(a));
-    return sortedUsers.slice(0, limit);
+    const usersWithNetWorth = await Promise.all(
+        serverUsers.map(async (user) => {
+            const netWorth = await calculateNetWorth(user);
+            return { user, netWorth };
+        })
+    );
+    usersWithNetWorth.sort((a, b) => b.netWorth - a.netWorth);
+    return usersWithNetWorth.map((entry) => entry.user).slice(0, limit);
 };
 
 export const getAllUsers = async (): Promise<IUser[]> => {
@@ -79,14 +85,16 @@ export const getAllUsers = async (): Promise<IUser[]> => {
     return UserModel.find().exec();
 };
 
-export const calculateNetWorth = (user: IUser): number => {
+export const calculateNetWorth = async (user: IUser): Promise<number> => {
     let networth = user.wallet + user.bank;
 
-    user.inventory.forEach((item) => {
-        const inventoryItem = await getItem(item[0]);
-        if (!inventoryItem) throw new Error("Wtf this item isn't real");
-        networth += inventoryItem.price * item[1];
-    });
+    await Promise.all(
+        user.inventory.map(async (item) => {
+            const inventoryItem = await getItem(item[0]);
+            if (!inventoryItem) throw new Error("Wtf this item isn't real");
+            networth += inventoryItem.price * item[1];
+        })
+    );
 
     return networth;
 };

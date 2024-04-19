@@ -150,7 +150,7 @@ const command: SlashCommand = {
 
             const promises = topUsers.map(async (user, index) => ({
                 name: `${createName(`${index + 1}. ${await getName(interaction.guild, user.userId)}`)}`,
-                value: `Net Worth: ¥${addCommas(calculateNetWorth(user))}`,
+                value: `Net Worth: ¥${addCommas(await calculateNetWorth(user))}`,
             }));
 
             const embed = new EmbedBuilder();
