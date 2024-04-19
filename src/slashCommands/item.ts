@@ -58,7 +58,7 @@ const command: SlashCommand = {
         const embed = new EmbedBuilder()
             .setTitle(`${item.id}: ${item.name}`)
             .setDescription(
-                `**${item.rarity}**\n${item.description}\n\n**Price:** ¥${addCommas(item.price)}${"\u00A0\u00A0\u00A0\u00A0"}**Consumable:** ${item.consumable}${"\u00A0\u00A0\u00A0\u00A0"}**Giftable:** ${item.giftable}`
+                `**${item.rarity}**\n${item.description}\n\n**Price:** ¥${typeof item.price === "number" ? addCommas(item.price) : item.price}${"\u00A0\u00A0\u00A0\u00A0"}**Consumable:** ${item.consumable}${"\u00A0\u00A0\u00A0\u00A0"}**Giftable:** ${item.giftable}`
             )
             .setThumbnail(thumbnailUrl)
             .setColor(rarityColour)
