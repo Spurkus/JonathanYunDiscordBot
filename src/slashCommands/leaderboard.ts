@@ -144,6 +144,8 @@ const command: SlashCommand = {
 
         if (!type) return interaction.reply("You must select a leaderboard type :3");
 
+        await interaction.deferReply();
+
         if (type == "yunbucks") {
             // YunBucks Leaderboard
             const topUsers = await getTopUsers(interaction.guild.members.fetch(), 10);
@@ -160,7 +162,7 @@ const command: SlashCommand = {
                 .setColor("Green")
                 .addFields(await Promise.all(promises));
 
-            return await interaction.reply({ embeds: [embed] });
+            return await interaction.editReply({ embeds: [embed] });
         } else if (type == "sex") {
             // Sex Leaderboard
             const topSex = await getTopSex(interaction.guild.members.fetch(), 10);
@@ -178,7 +180,7 @@ const command: SlashCommand = {
 
             const { embed, row } = await displayInteractionSex(promises, highestStreaks, true);
 
-            const response = await interaction.reply({
+            const response = await interaction.editReply({
                 embeds: [embed],
                 components: [row],
             });
@@ -221,7 +223,7 @@ const command: SlashCommand = {
 
             const { embed, row } = await displayInteractionEdge(promises, highestStreaks, true);
 
-            const response = await interaction.reply({
+            const response = await interaction.editReply({
                 embeds: [embed],
                 components: [row],
             });
