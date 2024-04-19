@@ -92,7 +92,7 @@ export const calculateNetWorth = async (user: IUser): Promise<number> => {
         user.inventory.map(async (item) => {
             const inventoryItem = await getItem(item[0]);
             if (!inventoryItem) throw new Error("Wtf this item isn't real");
-            networth += inventoryItem.price * item[1];
+            networth += inventoryItem.price * item[1] * 0.85;
         })
     );
 
