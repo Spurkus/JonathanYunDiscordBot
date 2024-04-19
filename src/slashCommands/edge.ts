@@ -95,7 +95,7 @@ const command: SlashCommand = {
             createEdger(userID);
             addToWallet(userID, 1000);
             return interaction.reply(
-                `Ooooooh, I see this is your first time edging!! Here's a ¥1000 **YunBucks** to get you started ${emoji.jonathan}`
+                `Ooooooh, I see this is your first time edging!! Here's a ¥1,000 **YunBucks** to get you started ${emoji.jonathan}`
             );
         }
 

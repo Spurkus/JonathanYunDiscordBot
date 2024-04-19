@@ -80,7 +80,15 @@ export const getAllUsers = async (): Promise<IUser[]> => {
 };
 
 export const calculateNetWorth = (user: IUser): number => {
-    return user.wallet + user.bank;
+    let networth = user.wallet + user.bank;
+
+    user.inventory.forEach((item) => {
+        const inventoryItem = await getItem(item[0]);
+        if (!inventoryItem) throw new Error("Wtf this item isn't real");
+        networth += inventoryItem.price * item[1];
+    });
+
+    return networth;
 };
 
 export const getSex = async (userId: string): Promise<ISex | null> => {

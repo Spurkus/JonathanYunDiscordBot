@@ -20,7 +20,7 @@ const command: SlashCommand = {
                 .setRequired(true);
         })
         .setDescription(
-            "Robs an innocent user probably. You need at least ¥5000 YunBucks in your wallet"
+            "Robs an innocent user probably. You need at least ¥5,000 YunBucks in your wallet"
         ),
     execute: async (interaction) => {
         const emoji = await getEmoji(interaction.client);
@@ -49,7 +49,7 @@ const command: SlashCommand = {
 
         if (user.wallet < 5000)
             return interaction.reply(
-                `You need at least ¥5000 **YunBucks** in your wallet to steal from ${targetExists}`
+                `You need at least ¥5,000 **YunBucks** in your wallet to steal from ${targetExists}`
             );
 
         if (target.wallet < 500)
@@ -63,7 +63,7 @@ const command: SlashCommand = {
             removeEffect(targetExists.id, 1, 1);
             removeFromWallet(userID, 1000);
             return interaction.reply(
-                `You have been cock BLOCKED!!!!!!! **Jonathan Yun** himself has take ¥1000 from you.\n${targetExists} is safe because they have ${emoji.shieldyun} **Shield of Yun** activated :3`
+                `You have been cock BLOCKED!!!!!!! **Jonathan Yun** himself has take ¥1,000 from you.\n${targetExists} is safe because they have ${emoji.shieldyun} **Shield of Yun** activated :3`
             );
         }
         const randomChance = Math.floor(Math.random() * 100);
@@ -77,7 +77,7 @@ const command: SlashCommand = {
         } else {
             removeFromWallet(userID, 5000);
             return interaction.reply(
-                `You were caught trying to steal from ${targetExists}. The police are not daijobu at all an fined you ¥5000 **YunBucks**`
+                `You were caught trying to steal from ${targetExists}. The police are not daijobu at all an fined you ¥5,000 **YunBucks**`
             );
         }
     },
