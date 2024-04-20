@@ -363,24 +363,27 @@ export const addEffect = async (
 
 export const removeEffect = async (
     userId: string,
-    effectId: number,
+    effectIds: Array<number> | number,
     amount: number
 ): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.");
     const user = await UserModel.findOne({ userId });
-    if (!user) {
-        throw new Error("User not found.");
-    }
+    if (!user) throw new Error("User not found.");
+
+    const effectIdArray = Array.isArray(effectIds) ? effectIds : [effectIds];
 
     // Check if the effect exists in active
-    const effectIndex = user.active.findIndex((effect) => effect[0] == effectId);
-    if (effectIndex != -1) {
-        if (user.active[effectIndex][1] - amount <= 0) {
-            user.active.splice(effectIndex, 1);
-        } else {
-            user.active[effectIndex][1] -= amount;
+    effectIdArray.forEach((effectId) => {
+        const effectIndex = user.active.findIndex((effect) => effect[0] == effectId);
+        if (effectIndex != -1) {
+            if (user.active[effectIndex][1] - amount <= 0) {
+                user.active.splice(effectIndex, 1);
+            } else {
+                user.active[effectIndex][1] -= amount;
+            }
         }
-    }
+    });
+
     const updatedUser = await UserModel.findOneAndUpdate(
         { userId },
         { active: user.active },

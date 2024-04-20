@@ -61,21 +61,28 @@ const command: SlashCommand = {
 
         const effectIDs = user.active.map((effect) => effect[0]);
         let messageActive: String = "";
+        let boost: Array<number> = [];
+        let luckBonus = 1;
+        let coinBonus = 0;
 
-        const luckActive = effectIDs.includes(3); // 3 is Luck effect
-        const luckBonus = luckActive ? 1.08 : 1;
-        if (luckActive) {
-            removeEffect(userID, 3, 1);
-            messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
+        for (let i = 0, len = effectIDs.length; i < len; i++) {
+            // 0 is The Coin of 69
+            if (effectIDs[i] == 0) {
+                messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
+                boost.push(0);
+                luckBonus = 1.08;
+                continue;
+            }
+
+            // 3 is Luck effect
+            if (effectIDs[i] == 3) {
+                messageActive += `${emoji["69coin"]} **The Coin of 69** has been activated\n`;
+                boost.push(3);
+                coinBonus = 0.19;
+                continue;
+            }
         }
-
-        const coinBonusActive = effectIDs.includes(0); // 0 is The Coin of 69 Bonus
-        const coinBonus = coinBonusActive ? 0.19 : 0;
-        if (coinBonusActive) {
-            removeEffect(userID, 0, 1);
-            messageActive += `${emoji["69coin"]} **The Coin of 69** has been activated\n`;
-        }
-
+        removeEffect(userID, boost, 1);
         if (messageActive) messageActive += "\n";
 
         if (randomChance > (0.5 + coinBonus) * luckBonus) {
