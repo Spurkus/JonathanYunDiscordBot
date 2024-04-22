@@ -61,7 +61,7 @@ const fishing = async (
     const luckBonus = luckActive ? 1.08 : 1;
     if (luckActive) {
         removeEffect(userID, 3, 1);
-        messageActive = ":four_leaf_clover: Luck of 8% bonus has been activated\n";
+        messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
     }
 
     const randomChance = Math.floor(Math.random() * 100 * luckBonus * Math.pow(1.1, rodRarity));
