@@ -38,17 +38,17 @@ const command: SlashCommand = {
             const response = completion.choices[0]?.message.content ?? null;
 
             if (response !== null) {
-                await interaction.editReply(
+                return await interaction.editReply(
                     `${interaction.user}: ${message}\n\n**Jonathan Yun**: ${response}`
                 );
             } else {
-                await interaction.editReply({
+                return await interaction.editReply({
                     content: "No response from the AI.",
                 });
             }
         } catch (error) {
             console.error(error);
-            await interaction.editReply({
+            return await interaction.editReply({
                 content: "Sorry, there was an error processing your request!",
             });
         }
