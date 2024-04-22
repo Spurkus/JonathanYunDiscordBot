@@ -18,8 +18,12 @@ const command: SlashCommand = {
             return option
                 .setName("item")
                 .setDescription("The name of the item you want to sell")
-                .setRequired(true)
                 .setAutocomplete(true);
+        })
+        .addStringOption((option) => {
+            return option
+                .setName("attribute")
+                .setDescription("The attributes of the item you want to sell");
         })
         .addStringOption((option) => {
             return option
@@ -60,48 +64,85 @@ const command: SlashCommand = {
         }
 
         const itemName = interaction.options.getString("item");
-        if (!itemName) return interaction.reply("You need to specify an item silly!");
+        const attribute = interaction.options.getString("attribute");
 
-        const item = await getItemName(itemName);
-        if (!item) return interaction.reply(`This item does not exist silly!! ${emoji.jonuwu}`);
-
-        const itemEmoji = emoji[item.emoji];
-        if (!itemEmoji) return interaction.reply("This item has an invalid emoji!!");
-
-        const userItem = user.inventory.find((userItem) => userItem[0] === item.id);
-        if (!userItem)
-            return interaction.reply(
-                `You don't even have ${emoji[item.emoji]} **${item.name}** in your inventory XD`
-            );
-
-        let amountNumber;
-        const amount = interaction.options.getString("amount");
-        if (amount) {
-            if (amount.toUpperCase() == "ALL") {
-                amountNumber = userItem[1];
-            } else if (/^\d+$/.test(amount)) {
-                amountNumber = parseInt(amount);
-            } else {
-                return interaction.reply(
-                    "Sell amount must be positive numbers (or 'all') you baka >.<"
-                );
-            }
-        } else {
-            amountNumber = 1;
+        if (!itemName && !attribute) {
+            return interaction.reply("You need to specify either an item or an attribute!");
         }
 
-        if (userItem[1] < amountNumber)
+        if (itemName) {
+            // Selling a specific item
+            const item = await getItemName(itemName);
+            if (!item) return interaction.reply(`This item does not exist silly!! ${emoji.jonuwu}`);
+
+            const userItem = user.inventory.find((userItem) => userItem[0] === item.id);
+            if (!userItem)
+                return interaction.reply(
+                    `You don't even have ${emoji[item.emoji]} **${item.name}** in your inventory XD`
+                );
+
+            let amountNumber;
+            const amount = interaction.options.getString("amount");
+            if (amount) {
+                if (amount.toUpperCase() == "ALL") {
+                    amountNumber = userItem[1];
+                } else if (/^\d+$/.test(amount)) {
+                    amountNumber = parseInt(amount);
+                } else {
+                    return interaction.reply(
+                        "Sell amount must be positive numbers (or 'all') you baka >.<"
+                    );
+                }
+            } else {
+                amountNumber = 1;
+            }
+
+            if (userItem[1] < amountNumber)
+                return interaction.reply(
+                    `You don't have enough ${emoji[item.emoji]} **${item.name}** to sell!`
+                );
+
+            const totalPrice = Math.floor(item.price * amountNumber * SELLING_PRICE_CONSTANT);
+            addToWallet(userID, totalPrice);
+            removeFromInventory(userID, item.id, amountNumber);
+
             return interaction.reply(
-                `You don't have enough ${emoji[item.emoji]} **${item.name}** to sell!`
+                `Successfully sold ${addCommas(amountNumber)} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(totalPrice)}`
             );
+        } else if (attribute) {
+            const amount = interaction.options.getString("amount");
+            if (amount)
+                return interaction.reply(
+                    "You cannot need to specify amount when selling attributes. It defaults to all"
+                );
+            // Selling all items with a certain attribute
+            const itemData = await getAllItems();
+            const itemsToSell = itemData.filter((item) => item.attributes.includes(attribute));
 
-        const totalPrice = Math.floor(item.price * amountNumber * SELLING_PRICE_CONSTANT);
-        addToWallet(userID, totalPrice);
-        removeFromInventory(userID, item.id, amountNumber);
+            if (itemsToSell.length === 0) {
+                return interaction.reply(
+                    `You don't have any items with the attribute "${attribute}" to sell!`
+                );
+            }
 
-        return interaction.reply(
-            `Successfully sold ${addCommas(amountNumber)} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(totalPrice)}`
-        );
+            let totalPrice = 0;
+            for (const item of itemsToSell) {
+                const userItem = user.inventory.find((userItem) => userItem[0] === item.id);
+                if (userItem) {
+                    const totalItemPrice = Math.floor(
+                        item.price * userItem[1] * SELLING_PRICE_CONSTANT
+                    );
+                    totalPrice += totalItemPrice;
+                    removeFromInventory(userID, item.id, userItem[1]);
+                }
+            }
+
+            addToWallet(userID, totalPrice);
+
+            return interaction.reply(
+                `${interaction.member} successfully sold all items with the attribute **${attribute}** for ¥${addCommas(totalPrice)} **YunBucks**!!!`
+            );
+        }
     },
     cooldown: 5,
 };

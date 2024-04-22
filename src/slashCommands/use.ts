@@ -69,7 +69,7 @@ const command: SlashCommand = {
             );
 
         if (!item.consumable)
-            return interaction.reply(`You can consume this item silly!! ${emoji.jonathicc}`);
+            return interaction.reply(`You cannot consume this item silly!! ${emoji.jonathicc}`);
 
         const effect = await getEffect(item.id);
         if (!effect)
