@@ -125,6 +125,7 @@ const command: SlashCommand = {
                 );
             }
 
+            let itemIds = [];
             let totalPrice = 0;
             for (const item of itemsToSell) {
                 const userItem = user.inventory.find((userItem) => userItem[0] === item.id);
@@ -133,10 +134,11 @@ const command: SlashCommand = {
                         item.price * userItem[1] * SELLING_PRICE_CONSTANT
                     );
                     totalPrice += totalItemPrice;
-                    removeFromInventory(userID, item.id, userItem[1]);
+                    itemIds.push(item.id);
                 }
             }
 
+            removeFromInventory(userID, itemIds, -1);
             addToWallet(userID, totalPrice);
 
             return interaction.reply(

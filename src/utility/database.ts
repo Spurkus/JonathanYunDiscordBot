@@ -312,25 +312,31 @@ export const addToInventory = async (
 
 export const removeFromInventory = async (
     userId: string,
-    itemId: number,
+    itemIds: Array<number> | number,
     amount: number
 ): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.");
     const user = await UserModel.findOne({ userId });
-    if (!user) {
-        throw new Error("User not found.");
-    }
+    if (!user) throw new Error("User not found.");
 
-    // Check if the item exists in the inventory
-    const itemIndex = user.inventory.findIndex((item) => item[0] == itemId);
-    if (itemIndex != -1) {
-        user.inventory[itemIndex][1] -= amount;
-        if (user.inventory[itemIndex][1] <= 0) {
-            user.inventory.splice(itemIndex, 1);
+    const itemIdArray = Array.isArray(itemIds) ? itemIds : [itemIds];
+
+    // Check if the item exists in inventory
+    itemIdArray.forEach((itemId) => {
+        const itemIndex = user.inventory.findIndex((item) => item[0] == itemId);
+        if (itemIndex != -1) {
+            if (amount === -1) {
+                user.inventory.splice(itemIndex, 1);
+            } else {
+                if (user.inventory[itemIndex][1] - amount <= 0) {
+                    user.inventory.splice(itemIndex, 1);
+                } else {
+                    user.inventory[itemIndex][1] -= amount;
+                }
+            }
         }
-    } else {
-        throw new Error("Item not found in inventory.");
-    }
+    });
+
     const updatedUser = await UserModel.findOneAndUpdate(
         { userId },
         { inventory: user.inventory },
