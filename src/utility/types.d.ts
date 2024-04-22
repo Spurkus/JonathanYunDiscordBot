@@ -31,8 +31,8 @@ export interface IUser extends mongoose.Document {
     userId: string;
     bank: number;
     wallet: number;
-    inventory: Array<Array<number>>;
-    active: Array<Array<number>>;
+    inventory: Array<[number, number]>;
+    active: Array<[number, number]>;
 }
 
 export interface IEdge extends mongoose.Document {
