@@ -250,6 +250,11 @@ export const getAllItems = async (): Promise<IItem[]> => {
     return ItemModel.find().exec();
 };
 
+export const getAllItemAttribute = async (attribute: string): Promise<IItem[]> => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    return await ItemModel.find({ attributes: { $elemMatch: { $eq: attribute } } }).exec();
+};
+
 export const createItem = async (
     id: number,
     name: string,

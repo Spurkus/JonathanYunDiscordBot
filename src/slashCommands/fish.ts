@@ -1,13 +1,126 @@
-import { SlashCommandBuilder } from "discord.js";
-import { SlashCommand } from "../utility/types";
-import { getUser, createUser, removeEffect, addToInventory } from "../utility/database";
+import {
+    SlashCommandBuilder,
+    EmbedBuilder,
+    ChatInputCommandInteraction,
+    CacheType,
+} from "discord.js";
+import { rarityType, IItem, IUser, SlashCommand, EmojiMap } from "../utility/types";
+import {
+    getUser,
+    createUser,
+    removeEffect,
+    addToInventory,
+    getItem,
+    rarityOrder,
+    removeFromInventory,
+    getAllItemAttribute,
+} from "../utility/database";
 import getEmoji from "../utility/emoji";
+
+const getHighestRarityFishingRod = async (
+    inventory: [number, number][]
+): Promise<IItem | undefined> => {
+    // Filter out fishing rods from the inventory
+    const items = await Promise.all(
+        inventory.map(async ([itemId, _]) => {
+            const item = await getItem(itemId);
+            return item;
+        })
+    );
+
+    const fishingRods = items.filter((item) => item?.attributes.includes("Fishing Rod"));
+
+    // Find the fishing rod with the highest rarity
+    let highestRarityRod: IItem | undefined;
+    let highestRarity: rarityType = "Common"; // Lowest rarity by default
+
+    fishingRods.forEach(async (rodItem) => {
+        if (rodItem && rarityOrder[rodItem.rarity] >= rarityOrder[highestRarity]) {
+            highestRarity = rodItem.rarity;
+            highestRarityRod = rodItem;
+        }
+    });
+
+    return highestRarityRod;
+};
+
+const fishing = async (
+    interaction: ChatInputCommandInteraction<CacheType>,
+    userID: string,
+    user: IUser,
+    emoji: EmojiMap
+): Promise<string> => {
+    // User does not have fishing rod in inventory
+    const fishingRod = await getHighestRarityFishingRod(user.inventory);
+    if (!fishingRod) return `You don't even have a 🎣 **Fishing Rod** in your inventory XD`;
+    const rodRarity = rarityOrder[fishingRod.rarity];
+
+    const effectIDs = user.active.map((effect) => effect[0]);
+    let messageActive: String = `Using ${emoji[fishingRod.emoji]} **${fishingRod.name}**,\n`;
+    const luckActive = effectIDs.includes(3); // 3 is Luck effect
+    const luckBonus = luckActive ? 1.08 : 1;
+    if (luckActive) {
+        removeEffect(userID, 3, 1);
+        messageActive = ":four_leaf_clover: Luck of 8% bonus has been activated\n";
+    }
+
+    const randomChance = Math.floor(Math.random() * 100 * luckBonus * Math.pow(1.1, rodRarity));
+
+    // Fishing Rod destroyed
+    if (randomChance <= 1) {
+        removeFromInventory(userID, fishingRod.id, 1);
+        return `${messageActive}\n${interaction.member} fished too hard and ${emoji[fishingRod.emoji]} **${fishingRod.name}** broke :rofl:`;
+    }
+
+    // Fishes nothing
+    if (randomChance <= 4) {
+        return `${messageActive}\n${interaction.member} fished and the fishes hate you so nothing came up.`;
+    }
+
+    // Gets old boot
+    if (randomChance <= 8) {
+        addToInventory(userID, 6, 1);
+        return `${messageActive}\n${interaction.member} fished and hooked onto something!!! Unfortunately it was an old boot XD.\nYou received 1 🥾 **Old Boot**.`;
+    }
+
+    // Fishing Success!!
+    let messageFish = "";
+    const fishes = await getAllItemAttribute("Fish");
+    fishes.forEach((fish) => {
+        const rarityMultiplier = 1 + Math.pow(2, rodRarity); // Increase fish amount based on rod rarity
+        let fishAmount = 0;
+
+        if (fish.rarity === "Common") {
+            fishAmount = Math.floor((Math.random() * rarityMultiplier + 1) * luckBonus);
+        } else if (fish.rarity === "Uncommon") {
+            fishAmount = Math.floor(Math.random() * 0.5 * rarityMultiplier * luckBonus);
+        } else if (fish.rarity === "Rare") {
+            fishAmount = Math.floor(Math.random() * 0.125 * rarityMultiplier * luckBonus);
+        } else if (fish.rarity === "Epic") {
+            fishAmount = Math.floor(Math.random() * 0.025 * rarityMultiplier * luckBonus);
+        } else if (fish.rarity === "Legendary") {
+            fishAmount = Math.floor(Math.random() * 0.0125 * rarityMultiplier * luckBonus);
+        } else if (fish.rarity === "Mythic") {
+            fishAmount = Math.floor(Math.random() * 0.01 * rarityMultiplier * luckBonus);
+        }
+
+        if (fishAmount != 0) {
+            addToInventory(userID, fish.id, fishAmount);
+            messageFish += `${fishAmount} ${emoji[fish.emoji]} **${fish.name} [${fish.rarity}]** was caught\n`;
+        }
+    });
+
+    return `${messageActive}\n${messageFish}`;
+};
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
         .setName("fish")
         .setDescription("Fish with a fishing rod for a few YunBucks"),
     execute: async (interaction) => {
+        await interaction.deferReply();
+
+        const emoji = await getEmoji(interaction.client);
         const userID = interaction.user.id;
         const user = await getUser(userID);
 
@@ -19,46 +132,13 @@ const command: SlashCommand = {
             );
         }
 
-        // User does not have fishing rod in inventory
-        const hasRod = user.inventory.find((userItem) => userItem[0] === 4); // 4 is the fishing rod ID
-        if (!hasRod)
-            return interaction.reply(
-                `You don't even have a 🎣 **Fishing Rod** in your inventory XD`
-            );
+        const message = await fishing(interaction, userID, user, emoji);
+        const embed = new EmbedBuilder()
+            .setTitle("💦 **Fishing Time!!!** 💦")
+            .setDescription(message)
+            .setColor("Blue");
 
-        const effectIDs = user.active.map((effect) => effect[0]);
-        let messageActive: String = "";
-
-        const luckActive = effectIDs.includes(3); // 3 is Luck effect
-        const luckBonus = luckActive ? 1.08 : 1;
-        if (luckActive) {
-            removeEffect(userID, 3, 1);
-            messageActive = ":four_leaf_clover: Luck of 8% bonus has been activated\n";
-        }
-
-        const randomChance = Math.floor(Math.random() * 100) * luckBonus; // Random :3
-
-        // Fishes nothing
-        if (randomChance <= 8) {
-            return interaction.reply(
-                `${messageActive}${interaction.member}, you fished and the fishes hate you so nothing came up.`
-            );
-        }
-
-        // Gets old boot
-        if (randomChance <= 15) {
-            addToInventory(userID, 6, 1);
-            return interaction.reply(
-                `${messageActive}${interaction.member}, you fished and hooked onto something!!! Unfortunately it was an old boot XD.\nYou received 1 🥾 **Old Boot**.`
-            );
-        }
-
-        // Fishing Success!!
-        const fishAmount = Math.floor(Math.random() * 5 * luckBonus) + 1; // Random :3
-        addToInventory(userID, 5, fishAmount);
-        return interaction.reply(
-            `${messageActive}${interaction.member}, you successfully fished up ${fishAmount} 🐟 **Fish**!!`
-        );
+        return await interaction.editReply({ embeds: [embed] });
     },
     cooldown: 10,
 };
