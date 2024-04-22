@@ -19,6 +19,17 @@ export const addFieldToUsers = async (name: string, defaultValue: any) => {
     }
 };
 
+export const addFieldToItems = async (name: string, defaultValue: any) => {
+    if (connection.readyState === 0) throw new Error("Database not connected.");
+    try {
+        // Update all documents in the user collection to add the wordSaid field
+        await ItemModel.updateMany({}, { $set: { [name]: defaultValue } });
+        console.log("Field added to all items successfully.");
+    } catch (error) {
+        console.error("Error adding field to users:", error);
+    }
+};
+
 export const getUser = async (userId: string): Promise<IUser | null> => {
     if (connection.readyState === 0) throw new Error("Database not connected.");
     return UserModel.findOne({ userId }).exec();
@@ -235,6 +246,7 @@ export const createItem = async (
     emoji: string,
     rarity: rarityType,
     description: string,
+    attributes: Array<string>,
     price: number,
     buyable: boolean,
     consumable: boolean,
@@ -247,6 +259,7 @@ export const createItem = async (
         emoji,
         rarity,
         description,
+        attributes,
         price,
         buyable,
         consumable,

@@ -63,6 +63,7 @@ export interface IItem extends mongoose.Document {
     emoji: string;
     rarity: rarityType;
     description: string;
+    attributes: Array<String>;
     price: number;
     buyable: boolean;
     consumable: boolean;

@@ -7,6 +7,7 @@ const ItemSchema = new Schema({
     emoji: { type: String },
     rarity: { type: String },
     description: { type: String },
+    attributes: { type: Array<String> },
     price: { type: Number },
     buyable: { type: Boolean },
     consumable: { type: Boolean },

@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Collection, GuildEmoji } from "discord.js";
+import { Client, GatewayIntentBits, Collection } from "discord.js";
 const { Guilds, MessageContent, GuildMessages, GuildMembers } = GatewayIntentBits;
 const client = new Client({
     intents: [Guilds, MessageContent, GuildMessages, GuildMembers],
@@ -8,7 +8,7 @@ import { SlashCommand } from "./utility/types";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { join } from "path";
-import { addFieldToUsers, createItem, createEffect } from "./utility/database";
+import { addFieldToUsers, createItem, createEffect, addFieldToItems } from "./utility/database";
 config();
 
 client.slashCommands = new Collection<string, SlashCommand>();
@@ -21,6 +21,7 @@ readdirSync(handlersDir).forEach((handler) => {
 });
 
 // addFieldToUsers("active", []);
+// addFieldToItems("attributes", []);
 // createItem(
 //     21,
 //     "Jonathan Yun's Rod (for fishing)",
