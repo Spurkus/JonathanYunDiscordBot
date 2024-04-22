@@ -8,6 +8,16 @@ import ItemModel from "../schemas/Item";
 import EffectModel from "../schemas/Effect";
 import JobModel from "../schemas/Job";
 
+export const rarityOrder: Record<rarityType, number> = {
+    Common: 0,
+    Uncommon: 1,
+    Rare: 2,
+    Epic: 3,
+    Legendary: 4,
+    Mythic: 5,
+    Special: 6,
+};
+
 export const addFieldToUsers = async (name: string, defaultValue: any) => {
     if (connection.readyState === 0) throw new Error("Database not connected.");
     try {
