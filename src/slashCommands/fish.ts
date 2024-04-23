@@ -86,6 +86,9 @@ const fishing = async (
     // Fishing Success!!
     let messageFish = "";
     const fishes = await getAllItemAttribute("Fish");
+    const amountArray: Array<number> = [];
+    const fishIdArray: Array<number> = [];
+
     fishes.forEach((fish) => {
         const rarityMultiplier = 1 + Math.pow(2, rodRarity); // Increase fish amount based on rod rarity
         let fishAmount = 0;
@@ -105,11 +108,13 @@ const fishing = async (
         }
 
         if (fishAmount != 0) {
-            addToInventory(userID, fish.id, fishAmount);
+            fishIdArray.push(fish.id);
+            amountArray.push(fishAmount);
             messageFish += `${fishAmount} ${emoji[fish.emoji]} **${fish.name} [${fish.rarity}]** was caught\n`;
         }
     });
 
+    addToInventory(userID, amountArray, fishIdArray);
     return `${messageActive}\n${messageFish}`;
 };
 
