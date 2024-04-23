@@ -100,11 +100,11 @@ const fishing = async (
         } else if (fish.rarity === "Rare") {
             fishAmount = Math.round(Math.random() * 0.125 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Epic") {
-            fishAmount = Math.round(Math.random() * 0.085 * rarityMultiplier * luckBonus);
+            fishAmount = Math.round(Math.random() * 0.055 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Legendary") {
-            fishAmount = Math.round(Math.random() * 0.0525 * rarityMultiplier * luckBonus);
+            fishAmount = Math.round(Math.random() * 0.0225 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Mythic") {
-            fishAmount = Math.round(Math.random() * 0.03 * rarityMultiplier * luckBonus);
+            fishAmount = Math.round(Math.random() * 0.015 * rarityMultiplier * luckBonus);
         }
 
         if (fishAmount != 0) {
