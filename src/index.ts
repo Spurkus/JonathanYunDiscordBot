@@ -23,11 +23,12 @@ readdirSync(handlersDir).forEach((handler) => {
 // addFieldToUsers("active", []);
 // addFieldToItems("attributes", []);
 // createItem(
-//     21,
-//     "Jonathan Yun's Rod (for fishing)",
-//     "jonathanfishingrod",
-//     "Legendary",
-//     "big rod for big man Jonathan Yun (used for fishing 😼). You can only get this item from fishing!!",
+//     22,
+//     "Goat Fish",
+//     "goatfish",
+//     "Epic",
+//     "Ain't no freakin way its the GOAT fish. Goated with the sauce with the goat fish? :goat:",
+//     ["Fish"],
 //     69000,
 //     false,
 //     false,
