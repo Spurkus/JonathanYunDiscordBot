@@ -64,11 +64,11 @@ const fishing = async (
         messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
     }
 
-    const randomChance = Math.random() * 100 * luckBonus;
-    const randomChanceRarity = randomChance * Math.pow(1.1, rodRarity);
+    const randomChance = Math.random() * 100;
+    const randomChanceRarity = randomChance * Math.pow(1.1, rodRarity) * luckBonus;
 
     // Return Jonathan Yun's Rod to the Gods...
-    if (randomChance <= 30 && fishingRod.id == 21) {
+    if (randomChance <= 32 && fishingRod.id == 21) {
         removeFromInventory(userID, 21, 1);
         return `${messageActive}\n${interaction.member}, **Jonathan Yun** touches you and retrieves his rod. "Someday you will be able to use my rod again.."`;
     }
@@ -91,7 +91,7 @@ const fishing = async (
     }
 
     // Gets Jonathan Yun's Rod
-    if (randomChance >= 99 && fishingRod.id != 21) {
+    if (randomChance >= 99.5 && fishingRod.id != 21) {
         addToInventory(userID, 21, 1);
         return `${messageActive}\n${interaction.member} fished and got something touched by the gods... ${emoji["jonathanfishingrod"]} **Jonathan Yun's Rod** was added to you inventory!!!`;
     }
