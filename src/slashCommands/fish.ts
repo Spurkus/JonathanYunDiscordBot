@@ -64,23 +64,36 @@ const fishing = async (
         messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
     }
 
-    const randomChance = Math.random() * 100 * luckBonus * Math.pow(1.1, rodRarity);
+    const randomChance = Math.random() * 100 * luckBonus;
+    const randomChanceRarity = randomChance * Math.pow(1.1, rodRarity);
+
+    // Return Jonathan Yun's Rod to the Gods...
+    if (randomChance <= 30 && fishingRod.id == 21) {
+        removeFromInventory(userID, 21, 1);
+        return `${messageActive}\n${interaction.member}, **Jonathan Yun** touches you and retrieves his rod. "Someday you will be able to use my rod again.."`;
+    }
 
     // Fishing Rod destroyed
-    if (randomChance <= 0.5) {
+    if (randomChanceRarity <= 0.5) {
         removeFromInventory(userID, fishingRod.id, 1);
         return `${messageActive}\n${interaction.member} fished too hard and ${emoji[fishingRod.emoji]} **${fishingRod.name}** broke :rofl:`;
     }
 
     // Fishes nothing
-    if (randomChance <= 4) {
+    if (randomChanceRarity <= 4) {
         return `${messageActive}\n${interaction.member} fished and the fishes hate you so nothing came up.`;
     }
 
     // Gets old boot
-    if (randomChance <= 8) {
+    if (randomChanceRarity <= 8) {
         addToInventory(userID, 6, 1);
         return `${messageActive}\n${interaction.member} fished and hooked onto something!!! Unfortunately it was an old boot XD.\nYou received 1 🥾 **Old Boot**.`;
+    }
+
+    // Gets Jonathan Yun's Rod
+    if (randomChance >= 99 && fishingRod.id != 21) {
+        addToInventory(userID, 21, 1);
+        return `${messageActive}\n${interaction.member} fished and got something touched by the gods... ${emoji["jonathanfishingrod"]} **Jonathan Yun's Rod** was added to you inventory!!!`;
     }
 
     // Fishing Success!!
@@ -100,11 +113,11 @@ const fishing = async (
         } else if (fish.rarity === "Rare") {
             fishAmount = Math.round(Math.random() * 0.125 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Epic") {
-            fishAmount = Math.round(Math.random() * 0.055 * rarityMultiplier * luckBonus);
+            fishAmount = Math.round(Math.random() * 0.06 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Legendary") {
-            fishAmount = Math.round(Math.random() * 0.0225 * rarityMultiplier * luckBonus);
+            fishAmount = Math.round(Math.random() * 0.054 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Mythic") {
-            fishAmount = Math.round(Math.random() * 0.015 * rarityMultiplier * luckBonus);
+            fishAmount = Math.round(Math.random() * 0.052 * rarityMultiplier * luckBonus);
         }
 
         if (fishAmount != 0) {
