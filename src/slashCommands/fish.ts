@@ -114,7 +114,7 @@ const fishing = async (
         }
     });
 
-    addToInventory(userID, amountArray, fishIdArray);
+    addToInventory(userID, fishIdArray, amountArray);
     return `${messageActive}\n${messageFish}`;
 };
 
