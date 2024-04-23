@@ -64,10 +64,10 @@ const fishing = async (
         messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
     }
 
-    const randomChance = Math.floor(Math.random() * 100 * luckBonus * Math.pow(1.1, rodRarity));
+    const randomChance = Math.random() * 100 * luckBonus * Math.pow(1.1, rodRarity);
 
     // Fishing Rod destroyed
-    if (randomChance <= 1) {
+    if (randomChance <= 0.5) {
         removeFromInventory(userID, fishingRod.id, 1);
         return `${messageActive}\n${interaction.member} fished too hard and ${emoji[fishingRod.emoji]} **${fishingRod.name}** broke :rofl:`;
     }
@@ -100,11 +100,11 @@ const fishing = async (
         } else if (fish.rarity === "Rare") {
             fishAmount = Math.floor(Math.random() * 0.125 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Epic") {
-            fishAmount = Math.floor(Math.random() * 0.025 * rarityMultiplier * luckBonus);
+            fishAmount = Math.floor(Math.random() * 0.085 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Legendary") {
-            fishAmount = Math.floor(Math.random() * 0.0125 * rarityMultiplier * luckBonus);
+            fishAmount = Math.floor(Math.random() * 0.0525 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Mythic") {
-            fishAmount = Math.floor(Math.random() * 0.01 * rarityMultiplier * luckBonus);
+            fishAmount = Math.floor(Math.random() * 0.03 * rarityMultiplier * luckBonus);
         }
 
         if (fishAmount != 0) {
