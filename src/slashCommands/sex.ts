@@ -18,6 +18,7 @@ const command: SlashCommand = {
         })
         .setDescription("Check user's sex"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         let userID = interaction.user.id;
         let targetUser = interaction.options.getUser("target");
 
@@ -29,7 +30,7 @@ const command: SlashCommand = {
         const total = user ? user.total : 0;
 
         if (!user) {
-            if (targetUser) return interaction.reply("This person hasn't even sex yet!!");
+            if (targetUser) return interaction.editReply("This person hasn't even sex yet!!");
             createSex(userID);
         }
 
@@ -43,7 +44,7 @@ const command: SlashCommand = {
                 targetUser ? targetUser.displayAvatarURL() : interaction.user.displayAvatarURL()
             );
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
         });
     },

@@ -32,9 +32,11 @@ const command: SlashCommand = {
         const wallet = user ? user.wallet : 0;
         const bank = user ? user.bank : 500;
 
+        await interaction.deferReply();
+
         if (!user) {
             if (targetUser)
-                return interaction.reply(
+                return interaction.editReply(
                     "This person hasn't even made a bank account in 'Yun Banks™' yet, trying to access their balance you're so silly billy"
                 );
             message =
@@ -53,7 +55,7 @@ const command: SlashCommand = {
             )
             .setFooter({ text: "Yun Banks™" });
 
-        await interaction.reply({
+        await interaction.editReply({
             content: message,
             embeds: [embed],
         });

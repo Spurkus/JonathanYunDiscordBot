@@ -38,18 +38,19 @@ const command: SlashCommand = {
         await interaction.respond(filtered);
     },
     execute: async (interaction) => {
+        await interaction.deferReply();
         const emoji = await getEmoji(interaction.client);
         const itemName = interaction.options.getString("name");
-        if (!itemName) return interaction.reply("You need to specify an item silly!");
+        if (!itemName) return interaction.editReply("You need to specify an item silly!");
 
         const item = await getItemName(itemName);
-        if (!item) return interaction.reply(`This item does not exist silly!! ${emoji.jonuwu}`);
+        if (!item) return interaction.editReply(`This item does not exist silly!! ${emoji.jonuwu}`);
 
         const itemEmoji = emoji[item.emoji];
-        if (!itemEmoji) return interaction.reply("This item has an invalid emoji!!");
+        if (!itemEmoji) return interaction.editReply("This item has an invalid emoji!!");
 
         const rarityColour = rarityColours[item.rarity];
-        if (!rarityColour) return interaction.reply("The rarity is invalid");
+        if (!rarityColour) return interaction.editReply("The rarity is invalid");
 
         const thumbnailUrl = itemEmoji.id
             ? itemEmoji.url
@@ -66,7 +67,7 @@ const command: SlashCommand = {
             .setColor(rarityColour)
             .setFooter({ text: "Yun Shops™" });
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
         });
     },

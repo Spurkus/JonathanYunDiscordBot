@@ -137,14 +137,13 @@ const command: SlashCommand = {
         })
         .setDescription("Check top 10 YunBuck networth or top 10 Sex in server"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         if (!interaction.guild?.members)
-            return interaction.reply("You need to be in a server to use this silly!!!");
+            return interaction.editReply("You need to be in a server to use this silly!!!");
 
         const type = interaction.options.getString("type");
 
-        if (!type) return interaction.reply("You must select a leaderboard type :3");
-
-        await interaction.deferReply();
+        if (!type) return interaction.editReply("You must select a leaderboard type :3");
 
         if (type == "yunbucks") {
             // YunBucks Leaderboard

@@ -54,6 +54,7 @@ const command: SlashCommand = {
         await interaction.respond(filtered);
     },
     execute: async (interaction) => {
+        await interaction.deferReply();
         const userID = interaction.user.id;
         const user = await getUser(userID);
         const targetExists = interaction.options.getUser("target");
@@ -62,23 +63,25 @@ const command: SlashCommand = {
         let amountNumber: number;
 
         if (!targetExists)
-            return interaction.reply("You gotta tell me who you're giving YunBucks/items to :sob:");
+            return interaction.editReply(
+                "You gotta tell me who you're giving YunBucks/items to :sob:"
+            );
         if (!amount)
-            return interaction.reply("You have to specify an amount you're giving to someone");
+            return interaction.editReply("You have to specify an amount you're giving to someone");
 
         const target = await getUser(targetExists.id);
 
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to give people stuff :sob:.\nIt's ok, I will make one for you <3"
             );
         }
 
         // Target has not tried any economy
         if (!target)
-            return interaction.reply(
+            return interaction.editReply(
                 `${targetExists} hasn't even opened up a bank account in 'Yun Banks™' yet and you're trying to give stuff to them :sob:`
             );
 
@@ -90,30 +93,31 @@ const command: SlashCommand = {
             } else if (/^\d+$/.test(amount)) {
                 amountNumber = parseInt(amount);
             } else {
-                return interaction.reply("Silly!!! You have to input positive whole numbers!!");
+                return interaction.editReply("Silly!!! You have to input positive whole numbers!!");
             }
 
             if (user.wallet < amountNumber)
-                return interaction.reply(
+                return interaction.editReply(
                     "You can't have enough YunBucks in your wallet to give to the person :3"
                 );
 
             removeFromWallet(userID, amountNumber);
             addToWallet(targetExists.id, amountNumber);
-            return interaction.reply(
+            return interaction.editReply(
                 `You gave ${targetExists}, ¥${addCommas(amountNumber)} **YunBucks**!`
             );
         } else {
             // Giving Items!!
             const item = await getItemName(itemName);
-            if (!item) return interaction.reply(`This item does not exist silly!! ${emoji.jonuwu}`);
+            if (!item)
+                return interaction.editReply(`This item does not exist silly!! ${emoji.jonuwu}`);
 
             const itemEmoji = emoji[item.emoji];
-            if (!itemEmoji) return interaction.reply("This item has an invalid emoji!!");
+            if (!itemEmoji) return interaction.editReply("This item has an invalid emoji!!");
 
             const userItem = user.inventory.find((userItem) => userItem[0] === item.id);
             if (!userItem)
-                return interaction.reply(
+                return interaction.editReply(
                     `You don't even have ${emoji[item.emoji]} **${item.name}** in your inventory XD`
                 );
 
@@ -122,17 +126,17 @@ const command: SlashCommand = {
             } else if (/^\d+$/.test(amount)) {
                 amountNumber = parseInt(amount);
             } else {
-                return interaction.reply("Silly!!! You have to input positive whole numbers!!");
+                return interaction.editReply("Silly!!! You have to input positive whole numbers!!");
             }
 
             if (userItem[1] < amountNumber)
-                return interaction.reply(
+                return interaction.editReply(
                     `You don't have enough ${emoji[item.emoji]} **${item.name}** to sell!`
                 );
 
             removeFromInventory(userID, item.id, amountNumber);
             addToInventory(targetExists.id, item.id, amountNumber);
-            return interaction.reply(
+            return interaction.editReply(
                 `Successfully gave ${amountNumber} ${emoji[item.emoji]} **${item.name}** to ${targetExists}`
             );
         }

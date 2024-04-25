@@ -51,6 +51,7 @@ const game = (thingy: string, disable: boolean) => {
 const command: SlashCommand = {
     command: new SlashCommandBuilder().setName("jobs").setDescription("Job Search"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const userID = interaction.user.id;
         const user = await getUser(userID);
         let worker = await getWorker(userID);
@@ -58,7 +59,7 @@ const command: SlashCommand = {
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to get a job smh.\nIt's ok, I will make one for you <3"
             );
         }
@@ -71,7 +72,7 @@ const command: SlashCommand = {
             `Your current job is **${Array.from(jobs.keys())[curJob - 1]}**`,
             false
         );
-        await interaction.reply(gameComponents);
+        await interaction.editReply(gameComponents);
 
         const filter = (i: MessageComponentInteraction) => i.user.id === userID;
         const collector = interaction.channel?.createMessageComponentCollector({

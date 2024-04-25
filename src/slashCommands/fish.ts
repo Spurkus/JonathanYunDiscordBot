@@ -145,7 +145,7 @@ const command: SlashCommand = {
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to fish smh.\nIt's ok, I will make one for you <3"
             );
         }

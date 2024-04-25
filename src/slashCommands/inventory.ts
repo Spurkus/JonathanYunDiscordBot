@@ -16,13 +16,14 @@ const command: SlashCommand = {
         .setName("inventory")
         .setDescription("Shows the items in your inventory :3"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const emoji = await getEmoji(interaction.client);
 
         const userID = interaction.user.id;
         const user = await getUser(userID);
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to see the items you've never bought :sob:.\nIt's ok, I will make one for you <3"
             );
         }
@@ -46,7 +47,7 @@ const command: SlashCommand = {
             .setFields(...(await Promise.all(itemDisplay)))
             .setFooter({ text: "Yunventory™" });
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
         });
     },

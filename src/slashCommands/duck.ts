@@ -7,6 +7,7 @@ const command: SlashCommand = {
         .setName("duck")
         .setDescription("Gives you a randomised cute duck photo yay :33"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const { image, attach } = imageFinder("duck");
 
         const embed = new EmbedBuilder()
@@ -15,7 +16,7 @@ const command: SlashCommand = {
             .setImage(`attachment://${image}`)
             .setColor(`Aqua`);
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
             files: [attach],
         });

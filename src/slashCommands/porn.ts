@@ -3,9 +3,10 @@ import { SlashCommand } from "../utility/types";
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder().setName("porn").setDescription("O///O"),
-    execute: (interaction) => {
+    execute: async (interaction) => {
+        await interaction.deferReply();
         const pornImage = "https://i.imgur.com/E7fHQGR.png";
-        interaction.reply({
+        interaction.editReply({
             content: `||${pornImage}$||`,
         });
     },

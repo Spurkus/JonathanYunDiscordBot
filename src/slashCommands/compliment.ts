@@ -12,6 +12,7 @@ const command: SlashCommand = {
         })
         .setDescription("Gives you a random compliment :3"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const compliments = [
             " is very cute :3",
             " is AMAZING!!!",
@@ -45,7 +46,7 @@ const command: SlashCommand = {
         const target = interaction.options.getString("target");
 
         // Send the message to the same channel
-        await interaction.reply(`${target}${compliment}\nsent by ${interaction.member}`);
+        await interaction.editReply(`${target}${compliment}\nsent by ${interaction.member}`);
     },
     cooldown: 5,
 };

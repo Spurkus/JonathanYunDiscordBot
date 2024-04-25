@@ -26,40 +26,44 @@ const command: SlashCommand = {
         const user = await getUser(userID);
         const randomChance = Math.random();
 
+        await interaction.deferReply();
+
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to gamble smh.\nIt's ok, I will make one for you <3"
             );
         }
 
         const amount = interaction.options.getString("amount");
-        if (!amount) return interaction.reply("Bruh, you need amount to gamble idiot");
+        if (!amount) return interaction.editReply("Bruh, you need amount to gamble idiot");
 
         let gamble: number;
         if (amount.toUpperCase() == "ALL") {
             gamble = user.wallet;
         } else {
             if (!/^\d+$/.test(amount))
-                return interaction.reply(
+                return interaction.editReply(
                     "Gamble amount must be positive numbers (or 'all') you baka >.<"
                 );
 
             gamble = parseInt(amount);
 
             if (gamble <= 0)
-                return interaction.reply(
+                return interaction.editReply(
                     "Gamble amount must be positive numbers (or 'all') you baka >.<"
                 );
 
             if (gamble > user.wallet)
-                return interaction.reply(
+                return interaction.editReply(
                     "You don't have that amount of **YunBucks** in your wallet to gamble"
                 );
 
             if (gamble > 1000000)
-                return interaction.reply("You can't gamble more than ¥1,000,000 **YunBucks!!**");
+                return interaction.editReply(
+                    "You can't gamble more than ¥1,000,000 **YunBucks!!**"
+                );
         }
 
         gamble = gamble > 1000000 ? 1000000 : gamble;
@@ -92,13 +96,13 @@ const command: SlashCommand = {
 
         if (randomChance > (0.5 + coinBonus) * luckBonus) {
             removeFromWallet(userID, gamble);
-            return interaction.reply(
+            return interaction.editReply(
                 `${messageActive}LMAOOO IMAGINE LOSING THAT MUCH MONEY LLLL. ¥${addCommas(gamble)} **YunBucks** was taken from your wallet`
             );
         }
 
         addToWallet(userID, gamble);
-        return interaction.reply(
+        return interaction.editReply(
             `${messageActive}AYYY YOU WON!!! ¥${addCommas(gamble)} **YunBucks** was added into your wallet`
         );
     },

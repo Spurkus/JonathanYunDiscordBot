@@ -6,6 +6,7 @@ const command: SlashCommand = {
         .setName("about")
         .setDescription("Jonathan Yun's about me :33"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const embed = new EmbedBuilder()
             .setDescription("Hi! I'm Jonathan Yun, and I'm awesome!!")
             .setTitle("About Me")
@@ -39,7 +40,7 @@ const command: SlashCommand = {
                 }
             );
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
         });
     },

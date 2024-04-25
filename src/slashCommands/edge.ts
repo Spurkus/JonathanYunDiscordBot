@@ -78,6 +78,7 @@ const command: SlashCommand = {
         })
         .setDescription("lmao gambling addiction moment but edging :3"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const userID = interaction.user.id;
         const emoji = await getEmoji(interaction.client);
         const user = await getUser(userID);
@@ -86,7 +87,7 @@ const command: SlashCommand = {
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already edging smh.\nIt's ok, I will make one for you <3"
             );
         }
@@ -94,14 +95,14 @@ const command: SlashCommand = {
         if (!edger) {
             createEdger(userID);
             addToWallet(userID, 1000);
-            return interaction.reply(
+            return interaction.editReply(
                 `Ooooooh, I see this is your first time edging!! Here's a ¥1,000 **YunBucks** to get you started ${emoji.jonathan}`
             );
         }
 
         const amount = interaction.options.getString("amount");
 
-        if (!amount) return interaction.reply("Bruh, you need amount to edge idiot");
+        if (!amount) return interaction.editReply("Bruh, you need amount to edge idiot");
 
         let gamble: number;
         let streak = 0;
@@ -110,19 +111,19 @@ const command: SlashCommand = {
             gamble = user.wallet;
         } else {
             if (!/^\d+$/.test(amount))
-                return interaction.reply(
+                return interaction.editReply(
                     "Gamble amount must be positive numbers (or 'all') you baka >.<"
                 );
 
             gamble = parseInt(amount);
 
             if (gamble <= 0)
-                return interaction.reply(
+                return interaction.editReply(
                     "Gamble amount must be positive numbers (or 'all') you baka >.<"
                 );
 
             if (gamble > user.wallet)
-                return interaction.reply(
+                return interaction.editReply(
                     "You don't have that amount of **YunBucks** in your wallet to gamble"
                 );
         }
@@ -132,7 +133,7 @@ const command: SlashCommand = {
 
         const { embed, row } = game(gamble, streak, false, luckActive);
 
-        const response = await interaction.reply({
+        const response = await interaction.editReply({
             embeds: [embed],
             components: [row],
         });

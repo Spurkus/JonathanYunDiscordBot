@@ -14,49 +14,50 @@ const command: SlashCommand = {
         })
         .setDescription("Withdraw YunBucks from bank"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const userID = interaction.user.id;
         const user = await getUser(userID);
 
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to withdraw smh.\nIt's ok, I will make one for you <3"
             );
         }
 
         const amount = interaction.options.getString("amount");
-        if (!amount) return interaction.reply("Bruh, you need amount to withdraw idiot");
+        if (!amount) return interaction.editReply("Bruh, you need amount to withdraw idiot");
 
         if (amount.toUpperCase() == "ALL") {
             const all = user.bank;
             addToWallet(userID, all);
             removeFromBank(userID, all);
-            return interaction.reply(
+            return interaction.editReply(
                 `You withdrew ¥${addCommas(all)} **YunBucks** into your wallet`
             );
         }
 
         if (!/^\d+$/.test(amount))
-            return interaction.reply(
+            return interaction.editReply(
                 "Withdraw amount must be positive numbers (or 'all') you baka >.<"
             );
 
         const amountNumber = parseInt(amount);
 
         if (amountNumber <= 0)
-            return interaction.reply(
+            return interaction.editReply(
                 "Withdraw amount must be positive numbers (or 'all') you baka >.<"
             );
 
         if (amountNumber > user.bank)
-            return interaction.reply(
+            return interaction.editReply(
                 "You don't have that amount of **YunBucks** in your bank to withdraw"
             );
 
         removeFromBank(userID, amountNumber);
         addToWallet(userID, amountNumber);
-        return interaction.reply(
+        return interaction.editReply(
             `You withdrew ¥${addCommas(amountNumber)} **YunBucks** into your wallet`
         );
     },

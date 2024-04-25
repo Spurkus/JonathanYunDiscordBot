@@ -49,33 +49,36 @@ const command: SlashCommand = {
 
         const userID = interaction.user.id;
         const user = await getUser(userID);
+
+        await interaction.deferReply();
+
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to buy items :O.\nIt's ok, I will make one for you <3"
             );
         }
 
         const itemName = interaction.options.getString("item");
-        if (!itemName) return interaction.reply("You need to specify an item silly!");
+        if (!itemName) return interaction.editReply("You need to specify an item silly!");
 
         const item = await getItemName(itemName);
-        if (!item) return interaction.reply(`This item does not exist silly!! ${emoji.jonuwu}`);
+        if (!item) return interaction.editReply(`This item does not exist silly!! ${emoji.jonuwu}`);
 
         const itemEmoji = emoji[item.emoji];
-        if (!itemEmoji) return interaction.reply("This item has an invalid emoji!!");
+        if (!itemEmoji) return interaction.editReply("This item has an invalid emoji!!");
 
         const amountSet = interaction.options.getInteger("amount");
         let amount = amountSet ? amountSet : 1;
         if (amount <= 0)
-            return interaction.reply("Silly!!! You have to input positive whole numbers!!");
+            return interaction.editReply("Silly!!! You have to input positive whole numbers!!");
 
         if (!item.buyable) {
-            return interaction.reply(`You cannot buy this item stupid!!!!!!!!!!!!!!!!!!!!`);
+            return interaction.editReply(`You cannot buy this item stupid!!!!!!!!!!!!!!!!!!!!`);
         }
 
         if (user.wallet < item.price * amount) {
-            return interaction.reply(
+            return interaction.editReply(
                 `YOU'RE POOR :rofl: You don't have enough **YunBucks** in your wallet to buy ${addCommas(amount)} **${item.name}**\nYou need at least ¥${addCommas(item.price * amount)} **YunBucks** in your wallet!`
             );
         }
@@ -83,7 +86,7 @@ const command: SlashCommand = {
         removeFromWallet(userID, item.price * amount);
         addToInventory(userID, item.id, amount);
 
-        return interaction.reply(
+        return interaction.editReply(
             `Successfully bought ${addCommas(amount)} ${emoji[item.emoji]} **${item.name}** for ¥${addCommas(item.price * amount)}`
         );
     },

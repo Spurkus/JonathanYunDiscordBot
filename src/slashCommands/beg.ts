@@ -15,10 +15,11 @@ const command: SlashCommand = {
         const userID = interaction.user.id;
         const user = await getUser(userID);
 
+        await interaction.deferReply();
         // User has not tried any economy things yet :3
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already begging smh.\nIt's ok, I will make one for you <3"
             );
         }
@@ -37,7 +38,7 @@ const command: SlashCommand = {
 
         // Receives Nothing
         if (randomChance <= 8) {
-            return interaction.reply(
+            return interaction.editReply(
                 `${messageActive}${interaction.member}, you begged and nobody likes you so received nothing LMAOO. ¥0 **YunBucks** was added`
             );
         }
@@ -46,7 +47,7 @@ const command: SlashCommand = {
         if (randomChance <= 15 && user.wallet > 200) {
             var randomNumber = Math.floor(Math.random() * 200) + 1;
             removeFromWallet(userID, randomNumber);
-            return interaction.reply(
+            return interaction.editReply(
                 `${messageActive}${interaction.member}, you begged and someone hates you so they decided to rob you L. ¥${randomNumber} **YunBucks** was taken from your wallet`
             );
         }
@@ -54,7 +55,7 @@ const command: SlashCommand = {
         // Begging worked!
         var randomNumber = Math.floor(Math.random() * 500 * luckBonus) + 1;
         addToWallet(userID, randomNumber);
-        return interaction.reply(
+        return interaction.editReply(
             `${messageActive}${interaction.member}, you begged and received ¥${addCommas(randomNumber)} **YunBucks**.`
         );
     },

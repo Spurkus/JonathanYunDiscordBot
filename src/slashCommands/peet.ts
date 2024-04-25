@@ -7,6 +7,7 @@ const command: SlashCommand = {
         .setName("peet")
         .setDescription("50/50 chance of getting pets or feet pics"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const petfeet = Math.random() < 0.5;
 
         const description = petfeet
@@ -21,7 +22,7 @@ const command: SlashCommand = {
             .setImage(`attachment://${image}`)
             .setColor(`Aqua`);
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
             files: [attach],
         });

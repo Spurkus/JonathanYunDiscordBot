@@ -16,13 +16,14 @@ const command: SlashCommand = {
         .setName("effects")
         .setDescription("Shows your active effects :3"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const emoji = await getEmoji(interaction.client);
 
         const userID = interaction.user.id;
         const user = await getUser(userID);
         if (!user) {
             createUser(userID);
-            return interaction.reply(
+            return interaction.editReply(
                 "You have not made a bank account in 'Yun Banks™' yet, and you're already trying to see the effects you never had :sob:.\nIt's ok, I will make one for you <3"
             );
         }
@@ -46,7 +47,7 @@ const command: SlashCommand = {
             .setFields(...(await Promise.all(itemDisplay)))
             .setFooter({ text: "YunEffects™" });
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
         });
     },

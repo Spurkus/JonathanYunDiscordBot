@@ -9,6 +9,7 @@ const command: SlashCommand = {
         .setName("shop")
         .setDescription("Shows the items you can buy in Yun Shops™"),
     execute: async (interaction) => {
+        await interaction.deferReply();
         const emoji = await getEmoji(interaction.client);
         const items = await getAllItems();
 
@@ -26,7 +27,7 @@ const command: SlashCommand = {
             .setImage("https://i.imgur.com/EqDUIMX.png")
             .setFooter({ text: "Yun Shops™" });
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [embed],
         });
     },
