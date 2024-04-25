@@ -77,17 +77,17 @@ const command: SlashCommand = {
         for (let i = 0, len = effectIDs.length; i < len; i++) {
             // 0 is The Coin of 69
             if (effectIDs[i] == 0) {
-                messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
+                messageActive += `${emoji["69coin"]} **The Coin of 69** has been activated\n`;
                 boost.push(0);
-                luckBonus = 1.08;
+                coinBonus = 0.19;
                 continue;
             }
 
             // 3 is Luck effect
             if (effectIDs[i] == 3) {
-                messageActive += `${emoji["69coin"]} **The Coin of 69** has been activated\n`;
+                messageActive += ":four_leaf_clover: Luck of 8% bonus has been activated\n";
                 boost.push(3);
-                coinBonus = 0.19;
+                luckBonus = 1.08;
                 continue;
             }
         }
