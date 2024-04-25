@@ -68,7 +68,7 @@ const fishing = async (
     const randomChanceRarity = randomChance * Math.pow(1.1, rodRarity) * luckBonus;
 
     // Return Jonathan Yun's Rod to the Gods...
-    if (randomChance <= 32 && fishingRod.id == 21) {
+    if (randomChance <= 30 && fishingRod.id == 21) {
         removeFromInventory(userID, 21, 1);
         return `${messageActive}\n${interaction.member}, **Jonathan Yun** touches you and retrieves his rod. "Someday you will be able to use my rod again.."`;
     }
@@ -91,7 +91,7 @@ const fishing = async (
     }
 
     // Gets Jonathan Yun's Rod
-    if (randomChance >= 99.5 && fishingRod.id != 21) {
+    if (randomChance >= 99.75 && fishingRod.id != 21) {
         addToInventory(userID, 21, 1);
         return `${messageActive}\n${interaction.member} fished and got something touched by the gods... ${emoji["jonathanfishingrod"]} **Jonathan Yun's Rod** was added to you inventory!!!`;
     }
@@ -113,7 +113,7 @@ const fishing = async (
         } else if (fish.rarity === "Rare") {
             fishAmount = Math.round(Math.random() * 0.125 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Epic") {
-            fishAmount = Math.round(Math.random() * 0.06 * rarityMultiplier * luckBonus);
+            fishAmount = Math.round(Math.random() * 0.0595 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Legendary") {
             fishAmount = Math.round(Math.random() * 0.054 * rarityMultiplier * luckBonus);
         } else if (fish.rarity === "Mythic") {

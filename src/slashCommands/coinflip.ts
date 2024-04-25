@@ -57,7 +57,12 @@ const command: SlashCommand = {
                 return interaction.reply(
                     "You don't have that amount of **YunBucks** in your wallet to gamble"
                 );
+
+            if (gamble > 1000000)
+                return interaction.reply("You can't gamble more than ¥1,000,000 **YunBucks!!**");
         }
+
+        gamble = gamble > 1000000 ? 1000000 : gamble;
 
         const effectIDs = user.active.map((effect) => effect[0]);
         let messageActive: String = "";
