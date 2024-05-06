@@ -45,7 +45,7 @@ const event: BotEvent = {
                 if (difference == 1) {
                     setDate(userID);
                     addStreak(userID);
-                    const amount = (sex.streak + 1) * 100;
+                    const amount = (sex.streak + 1) * 1000;
 
                     let user = await getUser(userID);
                     if (!user) {
