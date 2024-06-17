@@ -28,11 +28,12 @@ npm start
 - Basic Economy
 - Sex
 - Funny
+- AI genrated responses :3
+- Economy Update (Shops, Items)
 
 ## 😘 To Do
-- Economy Update (Shops, Items, Work/Jobs)
+- Make Jobs functional
 - Web Scraping Image
-- AI genrated responses :3
 
 ---
 ![Jonathan Yun](https://i.imgur.com/E7fHQGR.png)
